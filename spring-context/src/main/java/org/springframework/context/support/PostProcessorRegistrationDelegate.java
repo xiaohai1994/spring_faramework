@@ -56,6 +56,28 @@ final class PostProcessorRegistrationDelegate {
 	}
 
 
+	/**
+	 * BeanFactoryPostProcessors按入场方式分为：
+	 * 1. 程序员调用ApplicationContext的API手动添加
+	 * 2. Spring自己扫描出来的
+	 *
+	 * BeanFactoryPostProcessor按类型又可以分为：
+	 * 1. 普通BeanFactoryPostProcessor
+	 * 2. BeanDefinitionRegistryPostProcessor
+	 *
+	 * 执行顺序顺序如下：
+	 * 1. 执行手动添加的BeanDefinitionRegistryPostProcessor                       的postProcessBeanDefinitionRegistry()方法
+	 * 2. 执行扫描出来的BeanDefinitionRegistryPostProcessor（实现了PriorityOrdered）的postProcessBeanDefinitionRegistry()方法
+	 * 3. 执行扫描出来的BeanDefinitionRegistryPostProcessor（实现了Ordered）		   的postProcessBeanDefinitionRegistry()方法
+	 * 4. 执行扫描出来的BeanDefinitionRegistryPostProcessor（普通）				   的postProcessBeanDefinitionRegistry()方法
+	 * 5. 执行扫描出来的BeanDefinitionRegistryPostProcessor（所有）				   的postProcessBeanFactory()方法
+	 * 6. 执行手动添加的BeanFactoryPostProcessor								   的postProcessBeanFactory()方法
+	 * 7. 执行扫描出来的BeanFactoryPostProcessor（实现了PriorityOrdered）		   的postProcessBeanFactory()方法
+	 * 8. 执行扫描出来的BeanFactoryPostProcessor（实现了Ordered）		   		   的postProcessBeanFactory()方法
+	 * 9. 执行扫描出来的BeanFactoryPostProcessor（普通）				   		   的postProcessBeanFactory()方法
+	 *
+	 * ConfigurationClassPostProcessor就会在第2步执行，会进行扫描
+	 */
 	public static void invokeBeanFactoryPostProcessors(
 			ConfigurableListableBeanFactory beanFactory, List<BeanFactoryPostProcessor> beanFactoryPostProcessors) {
 
@@ -210,19 +232,6 @@ final class PostProcessorRegistrationDelegate {
 	public static void registerBeanPostProcessors(
 			ConfigurableListableBeanFactory beanFactory, AbstractApplicationContext applicationContext) {
 
-		// WARNING: Although it may appear that the body of this method can be easily
-		// refactored to avoid the use of multiple loops and multiple lists, the use
-		// of multiple lists and multiple passes over the names of processors is
-		// intentional. We must ensure that we honor the contracts for PriorityOrdered
-		// and Ordered processors. Specifically, we must NOT cause processors to be
-		// instantiated (via getBean() invocations) or registered in the ApplicationContext
-		// in the wrong order.
-		//
-		// Before submitting a pull request (PR) to change this method, please review the
-		// list of all declined PRs involving changes to PostProcessorRegistrationDelegate
-		// to ensure that your proposal does not result in a breaking change:
-		// https://github.com/spring-projects/spring-framework/issues?q=PostProcessorRegistrationDelegate+is%3Aclosed+label%3A%22status%3A+declined%22
-
 		String[] postProcessorNames = beanFactory.getBeanNamesForType(BeanPostProcessor.class, true, false);
 
 		// Register BeanPostProcessorChecker that logs an info message when
@@ -254,6 +263,7 @@ final class PostProcessorRegistrationDelegate {
 		}
 
 		// First, register the BeanPostProcessors that implement PriorityOrdered.
+		// 升序排序
 		sortPostProcessors(priorityOrderedPostProcessors, beanFactory);
 		registerBeanPostProcessors(beanFactory, priorityOrderedPostProcessors);
 
@@ -281,11 +291,13 @@ final class PostProcessorRegistrationDelegate {
 		registerBeanPostProcessors(beanFactory, nonOrderedPostProcessors);
 
 		// Finally, re-register all internal BeanPostProcessors.
+		// MergedBeanDefinitionPostProcessor排在最后
 		sortPostProcessors(internalPostProcessors, beanFactory);
 		registerBeanPostProcessors(beanFactory, internalPostProcessors);
 
 		// Re-register post-processor for detecting inner beans as ApplicationListeners,
 		// moving it to the end of the processor chain (for picking up proxies etc).
+		// ApplicationListenerDetector放在所有BeanPostProcessor之后
 		beanFactory.addBeanPostProcessor(new ApplicationListenerDetector(applicationContext));
 	}
 
