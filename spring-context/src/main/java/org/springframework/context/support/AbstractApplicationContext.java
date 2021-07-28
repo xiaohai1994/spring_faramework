@@ -590,6 +590,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 				initApplicationEventMulticaster();
 
 				// Initialize other special beans in specific context subclasses.
+				// 给子类的模板方法
 				onRefresh();
 
 				// Check for listener beans and register them.
@@ -798,6 +799,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 				if (hms.getParentMessageSource() == null) {
 					// Only set parent context as parent MessageSource if no parent MessageSource
 					// registered already.
+					// 拿父ApplicationContext的messageSource作为this.messageSource的父messageSource
 					hms.setParentMessageSource(getInternalParentMessageSource());
 				}
 			}
@@ -911,6 +913,8 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	 */
 	protected void finishBeanFactoryInitialization(ConfigurableListableBeanFactory beanFactory) {
 		// Initialize conversion service for this context.
+		// 如果BeanFactory中存在名字叫conversionService的Bean,则设置为BeanFactory的conversionService属性
+		// ConversionService是用来进行类型转化的
 		if (beanFactory.containsBean(CONVERSION_SERVICE_BEAN_NAME) &&
 				beanFactory.isTypeMatch(CONVERSION_SERVICE_BEAN_NAME, ConversionService.class)) {
 			beanFactory.setConversionService(
@@ -920,6 +924,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		// Register a default embedded value resolver if no BeanFactoryPostProcessor
 		// (such as a PropertySourcesPlaceholderConfigurer bean) registered any before:
 		// at this point, primarily for resolution in annotation attribute values.
+		// 设置默认的占位符解析器
 		if (!beanFactory.hasEmbeddedValueResolver()) {
 			beanFactory.addEmbeddedValueResolver(strVal -> getEnvironment().resolvePlaceholders(strVal));
 		}
@@ -937,6 +942,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		beanFactory.freezeConfiguration();
 
 		// Instantiate all remaining (non-lazy-init) singletons.
+		// 实例化非懒加载的单例Bean
 		beanFactory.preInstantiateSingletons();
 	}
 
