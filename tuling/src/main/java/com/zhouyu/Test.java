@@ -11,11 +11,7 @@ public class Test {
 		context.register(AppConfig.class);
 		context.refresh();
 
-
-
 		UserService userService = context.getBean("userService", UserService.class);
 		userService.test();
-
-
 	}
 }
