@@ -17,9 +17,7 @@ public class ZhouyuSpringApplication {
 		applicationContext.register(config);
 		applicationContext.refresh();
 
-		// classpath
-		startTomcat(applicationContext); // pom.xml jetty
-
+		startTomcat(applicationContext);
 
 		return applicationContext;
 

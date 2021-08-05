@@ -1,6 +1,8 @@
 package com.zhouyu;
 
+import com.zhouyu.service.UserInterface;
 import com.zhouyu.service.UserService;
+import org.springframework.beans.SimpleTypeConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
@@ -12,14 +14,10 @@ public class Test {
 
 	public static void main(String[] args) {
 
-		// Spring Framework
 		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
 
-		UserService userService = context.getBean("userService", UserService.class);
+		UserInterface userService = context.getBean("userService", UserInterface.class);
 		userService.test();
-
-
-
 
 	}
 }

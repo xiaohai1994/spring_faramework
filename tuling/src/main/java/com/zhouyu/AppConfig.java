@@ -14,8 +14,6 @@ import javax.sql.DataSource;
 
 
 @ComponentScan("com.zhouyu")
-@EnableTransactionManagement
-@Configuration
 public class AppConfig {
 
 //	@Bean

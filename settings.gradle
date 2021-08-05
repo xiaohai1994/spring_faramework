@@ -61,4 +61,5 @@ include 'tuling'
 include 'tuling-web'
 include 'tuling-web'
 include 'tuling-boot'
+include 'tuling-vip-demo'
 
