@@ -55,9 +55,6 @@ public class CommonsPool2TargetSourceDemo {
 				new AnnotationConfigApplicationContext(CommonsPool2TargetSourceDemo.class);
 
 		UserService userService = applicationContext.getBean("userService", UserService.class);
-		UserService userService1 = applicationContext.getBean("userService", UserService.class);
-		UserService userService2 = applicationContext.getBean("userService", UserService.class);
-		UserService userService3 = applicationContext.getBean("userService", UserService.class);
 
 		new Thread(() -> userService.test()).start();
 		new Thread(() -> userService.test()).start();
