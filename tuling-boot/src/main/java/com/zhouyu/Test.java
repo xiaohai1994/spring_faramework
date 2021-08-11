@@ -7,7 +7,6 @@ import org.springframework.web.servlet.DispatcherServlet;
 
 @ZhouyuSpringBootApplication
 public class Test {
-
 	public static void main(String[] args) {
 		ZhouyuSpringApplication.run(Test.class);
 	}
