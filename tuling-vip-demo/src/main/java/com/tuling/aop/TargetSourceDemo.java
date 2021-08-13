@@ -21,7 +21,7 @@ public class TargetSourceDemo {
 
 			@Override
 			public boolean isStatic() {
-				return false;
+				return true;
 			}
 
 			@Override
@@ -36,8 +36,11 @@ public class TargetSourceDemo {
 		});
 
 		proxyFactory.addAdvice(new ZhouyuBeforeAdvise());
+		proxyFactory.setProxyTargetClass(true);
+		proxyFactory.setFrozen(true); // frozen和static都为true，可以使得代理对象执行方法是保证被代理对象是同一个
 
 		UserService proxy = (UserService) proxyFactory.getProxy();
+		proxy.test();
 		proxy.test();
 	}
 }

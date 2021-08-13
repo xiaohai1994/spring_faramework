@@ -35,8 +35,12 @@ public class Main {
 				}
 			}
 		});
+		enhancer.setInterfaces(new Class[]{UserInterface.class});
 
 		UserService userService = (UserService) enhancer.create();
 		userService.test("zhouyu");
+
+		UserInterface userInterface = (UserInterface) userService;
+		System.out.println(userInterface);
 	}
 }

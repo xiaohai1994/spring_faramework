@@ -15,11 +15,11 @@ public class UserService implements UserInterface {
 //		throw new NullPointerException();
 
 		System.out.println(this);
-		try {
-			Thread.sleep(3000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+//		try {
+//			Thread.sleep(3000);
+//		} catch (InterruptedException e) {
+//			e.printStackTrace();
+//		}
 	}
 
 

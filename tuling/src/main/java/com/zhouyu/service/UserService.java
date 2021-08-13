@@ -6,6 +6,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import javax.annotation.PostConstruct;
 
@@ -15,13 +17,10 @@ import javax.annotation.PostConstruct;
 @Component
 public class UserService {
 
-
-
 	public void test() {
 		System.out.println("test");
+
 	}
-
-
 
 
 }
