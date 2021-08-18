@@ -540,8 +540,12 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	 */
 	protected boolean isTypeMatch(String name, ResolvableType typeToMatch, boolean allowFactoryBeanInit)
 			throws NoSuchBeanDefinitionException {
+		// 判断name所对应的Bean的类型是不是typeToMatch
+		// allowFactoryBeanInit表示允不允许在这里实例化FactoryBean对象
 
+		// 如果name是&xxx，那么beanName就是xxx
 		String beanName = transformedBeanName(name);
+		// name是不是&xxx
 		boolean isFactoryDereference = BeanFactoryUtils.isFactoryDereference(name);
 
 		// Check manually registered singletons.
@@ -549,6 +553,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 		if (beanInstance != null && beanInstance.getClass() != NullBean.class) {
 			if (beanInstance instanceof FactoryBean) {
 				if (!isFactoryDereference) {
+					// 调用factoryBean.getObjectType()
 					Class<?> type = getTypeForFactoryBean((FactoryBean<?>) beanInstance);
 					return (type != null && typeToMatch.isAssignableFrom(type));
 				}
@@ -556,7 +561,9 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 					return typeToMatch.isInstance(beanInstance);
 				}
 			}
+			// 不是FactoryBean，就是普通Bean
 			else if (!isFactoryDereference) {
+				// 直接匹配
 				if (typeToMatch.isInstance(beanInstance)) {
 					// Direct match for exposed instance?
 					return true;
@@ -596,6 +603,8 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 			return parentBeanFactory.isTypeMatch(originalBeanName(name), typeToMatch);
 		}
 
+		// 单例池中没有name对应的Bean对象，就只能根据BeanDefinition来判断出类型了
+
 		// Retrieve corresponding bean definition.
 		RootBeanDefinition mbd = getMergedLocalBeanDefinition(beanName);
 		BeanDefinitionHolder dbd = mbd.getDecoratedDefinition();
@@ -615,6 +624,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 		// We're looking for a regular reference but we're a factory bean that has
 		// a decorated bean definition. The target bean should be the same type
 		// as FactoryBean would ultimately return.
+		// 如果BeanDefinition中设置的是FactoryBean
 		if (!isFactoryDereference && dbd != null && isFactoryBean(beanName, mbd)) {
 			// We should only attempt if the user explicitly set lazy-init to true
 			// and we know the merged bean definition is for a factory bean.
@@ -639,6 +649,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 		ResolvableType beanType = null;
 
 		// If it's a FactoryBean, we want to look at what it creates, not the factory class.
+		// BeanDefinition的类型是不是FactoryBean，如果是得先实例化FactoryBean这个对象，然后调用getObjectType方法才能知道具体的类型，前提是allowFactoryBeanInit为true
 		if (FactoryBean.class.isAssignableFrom(predictedType)) {
 			if (beanInstance == null && !isFactoryDereference) {
 				beanType = getTypeForFactoryBean(beanName, mbd, allowFactoryBeanInit);
@@ -1680,6 +1691,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 		if (result == null) {
 			// 根据BeanDefinition推测Bean类型（获取BeanDefinition的beanClass属性）
 			Class<?> beanType = predictBeanType(beanName, mbd, FactoryBean.class);
+			// 判断是不是实现了FactoryBean接口
 			result = (beanType != null && FactoryBean.class.isAssignableFrom(beanType));
 			mbd.isFactoryBean = result;
 		}

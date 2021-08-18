@@ -143,14 +143,17 @@ public class QualifierAnnotationAutowireCandidateResolver extends GenericTypeAwa
 	 */
 	@Override
 	public boolean isAutowireCandidate(BeanDefinitionHolder bdHolder, DependencyDescriptor descriptor) {
+		// 先执行上层判断，如果匹配成功，在由自己匹配
 		boolean match = super.isAutowireCandidate(bdHolder, descriptor);
 		if (match) {
+			// 拿到descriptor所对应的属性上的所有注解，检查是否有@Qualifier，如果有，看是否和当前bdHolder匹配
 			match = checkQualifiers(bdHolder, descriptor.getAnnotations());
 			if (match) {
 				MethodParameter methodParam = descriptor.getMethodParameter();
 				if (methodParam != null) {
 					Method method = methodParam.getMethod();
 					if (method == null || void.class == method.getReturnType()) {
+						// 方法参数前写的@Qualifier
 						match = checkQualifiers(bdHolder, methodParam.getMethodAnnotations());
 					}
 				}
@@ -171,7 +174,9 @@ public class QualifierAnnotationAutowireCandidateResolver extends GenericTypeAwa
 			Class<? extends Annotation> type = annotation.annotationType();
 			boolean checkMeta = true;
 			boolean fallbackToMeta = false;
+			// 当前注解是否是Qualifier
 			if (isQualifier(type)) {
+				// 属性上存在@Qualifier
 				if (!checkQualifier(bdHolder, annotation, typeConverter)) {
 					fallbackToMeta = true;
 				}
@@ -218,7 +223,9 @@ public class QualifierAnnotationAutowireCandidateResolver extends GenericTypeAwa
 	 */
 	protected boolean checkQualifier(
 			BeanDefinitionHolder bdHolder, Annotation annotation, TypeConverter typeConverter) {
+		// 检查某个Qualifier注解和某个BeanDefinition是否匹配
 
+		// annotation是某个属性或某个方法参数前上所使用的Qualifier
 		Class<? extends Annotation> type = annotation.annotationType();
 		RootBeanDefinition bd = (RootBeanDefinition) bdHolder.getBeanDefinition();
 
@@ -243,6 +250,7 @@ public class QualifierAnnotationAutowireCandidateResolver extends GenericTypeAwa
 				// Look for matching annotation on the target class
 				if (getBeanFactory() != null) {
 					try {
+						// 拿到某个BeanDefinition对应的类上的@Qualifier
 						Class<?> beanType = getBeanFactory().getType(bdHolder.getBeanName());
 						if (beanType != null) {
 							targetAnnotation = AnnotationUtils.getAnnotation(ClassUtils.getUserClass(beanType), type);
@@ -256,6 +264,7 @@ public class QualifierAnnotationAutowireCandidateResolver extends GenericTypeAwa
 					targetAnnotation = AnnotationUtils.getAnnotation(ClassUtils.getUserClass(bd.getBeanClass()), type);
 				}
 			}
+			// 注解对象的equals比较特殊，JDK层面用到了动态代理，会比较value
 			if (targetAnnotation != null && targetAnnotation.equals(annotation)) {
 				return true;
 			}
