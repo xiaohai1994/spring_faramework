@@ -2,6 +2,7 @@ package com.zhouyu.service;
 
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Lookup;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -19,25 +20,13 @@ import javax.annotation.PostConstruct;
 @Component
 public class UserService {
 
+	@Autowired
 	private OrderService orderService;
 
-	@Autowired(required = false)
-	private UserService(OrderService orderService) {
-		this.orderService = orderService;
-	}
 
-	@Autowired(required = false)
-	public UserService(OrderService orderService, OrderService orderService1) {
-		this.orderService = orderService;
-	}
-
-	@Autowired(required = false)
-	private UserService(OrderService orderService, OrderService orderService1, OrderService orderService2) {
-		this.orderService = orderService;
-	}
 
 	public void test() {
 		System.out.println(orderService);
-
 	}
+
 }

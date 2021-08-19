@@ -264,10 +264,13 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 				try {
 					Class<?> targetClass = beanClass;
 					do {
+						// 遍历targetClass中的method，查看是否写了@Lookup方法
 						ReflectionUtils.doWithLocalMethods(targetClass, method -> {
 							Lookup lookup = method.getAnnotation(Lookup.class);
 							if (lookup != null) {
 								Assert.state(this.beanFactory != null, "No BeanFactory available");
+
+								// 将当前method封装成LookupOverride并设置到BeanDefinition的methodOverrides中
 								LookupOverride override = new LookupOverride(method, lookup.value());
 								try {
 									RootBeanDefinition mbd = (RootBeanDefinition)
