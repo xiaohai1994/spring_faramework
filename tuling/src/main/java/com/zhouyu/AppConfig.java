@@ -1,16 +1,11 @@
 package com.zhouyu;
 
 
-import com.zhouyu.service.UserService;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
 
 
 @ComponentScan("com.zhouyu")
-@Configuration
 public class AppConfig {
-
 
 //	@Bean
 //	public JdbcTemplate jdbcTemplate() {
