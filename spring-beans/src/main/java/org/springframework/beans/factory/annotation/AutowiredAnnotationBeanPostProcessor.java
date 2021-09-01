@@ -521,6 +521,7 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 
 			// 遍历targetClass中的所有Method
 			ReflectionUtils.doWithLocalMethods(targetClass, method -> {
+
 				Method bridgedMethod = BridgeMethodResolver.findBridgedMethod(method);
 				if (!BridgeMethodResolver.isVisibilityBridgeMethodPair(method, bridgedMethod)) {
 					return;

@@ -12,4 +12,8 @@ public class UserService {
 	public void a(String name){
 		System.out.println(String.format("hello, %s", name));
 	}
+
+	public static void b(String name){
+		System.out.println(String.format("hello, %s", name));
+	}
 }

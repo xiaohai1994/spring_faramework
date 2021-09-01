@@ -164,6 +164,7 @@ public class ReflectiveAspectJAdvisorFactory extends AbstractAspectJAdvisorFacto
 		}
 
 		// Find introduction fields.
+		// 找到哪些字段上加了@DeclareParents注解，把这些字段以及对于的注解解析封装为Advisor，生成代理对象时会把对于的接口添加到ProxyFactory中
 		for (Field field : aspectClass.getDeclaredFields()) {
 			Advisor advisor = getDeclareParentsAdvisor(field);
 			if (advisor != null) {

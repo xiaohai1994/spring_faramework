@@ -7,11 +7,8 @@ public class Test {
 
 	public static void main(String[] args) {
 
-		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
-		context.register(AppConfig.class);
-		context.refresh();
-
-		UserService userService = context.getBean("userService", UserService.class);  // 代理对象
+		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
+		UserService userService = (UserService) context.getBean("userService");
 		userService.test();
 
 

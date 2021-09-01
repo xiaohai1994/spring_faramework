@@ -28,7 +28,7 @@ public class Main {
 		enhancer.setCallbackFilter(new CallbackFilter() {
 			@Override
 			public int accept(Method method) {
-				if (method.getName().equals("test")) {
+				if (method.getName().equals("test") || method.getName().equals("b")) {
 					return 0;
 				} else {
 					return 1;
@@ -38,9 +38,11 @@ public class Main {
 		enhancer.setInterfaces(new Class[]{UserInterface.class});
 
 		UserService userService = (UserService) enhancer.create();
-		userService.test("zhouyu");
+//		userService.test("zhouyu");
 
-		UserInterface userInterface = (UserInterface) userService;
-		System.out.println(userInterface);
+		userService.b("zhouyu");
+
+//		UserInterface userInterface = (UserInterface) userService;
+//		System.out.println(userInterface);
 	}
 }

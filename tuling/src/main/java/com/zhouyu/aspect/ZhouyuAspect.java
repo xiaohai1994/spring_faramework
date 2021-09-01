@@ -1,13 +1,14 @@
 package com.zhouyu.aspect;
 
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.*;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
+import org.aspectj.lang.annotation.Before;
 
-@Aspect
+//@Aspect
 //@Component
 public class ZhouyuAspect {
+
+//	@DeclareParents(value = "com.zhouyu.service.UserService", defaultImpl = UserImplement.class)
+//	private UserInterface userInterface;
 
 	@Before("execution(public void com.zhouyu.service.UserService.test())")
 	public void zhouyuBefore(JoinPoint joinPoint) {
