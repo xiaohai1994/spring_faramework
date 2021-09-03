@@ -334,6 +334,8 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 		do {
 			StartupStep processConfig = this.applicationStartup.start("spring.context.config-classes.parse");
 
+			// 解析配置类，会把每个BeanDefinitionHolder首先封装为ConfigurationClass
+			// 在这个过程中会进行扫描、导入等步骤，从而会找到其他的ConfigurationClass
 			parser.parse(candidates);
 			parser.validate();
 
@@ -347,7 +349,7 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 						registry, this.sourceExtractor, this.resourceLoader, this.environment,
 						this.importBeanNameGenerator, parser.getImportRegistry());
 			}
-			// 把配置类加载成BeanDefinition, 会处理
+			// 把所有的ConfigurationClass加载成BeanDefinition, 会处理
 			this.reader.loadBeanDefinitions(configClasses);
 			alreadyParsed.addAll(configClasses);
 			processConfig.tag("classCount", () -> String.valueOf(configClasses.size())).end();

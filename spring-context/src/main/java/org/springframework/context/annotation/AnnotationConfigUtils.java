@@ -281,6 +281,9 @@ public abstract class AnnotationConfigUtils {
 		if (scopedProxyMode.equals(ScopedProxyMode.NO)) {
 			return definition;
 		}
+
+		// 如果定义的scope是session、request这些，那么该Bean在注入给其他Bean时，得先生成一个代理对象注入给其他Bean
+		// 如果是这种情况，最终生成的BeanDefinition中的类是ScopedProxyFactoryBean，getObject()方法中会返回原本类的代理对象
 		boolean proxyTargetClass = scopedProxyMode.equals(ScopedProxyMode.TARGET_CLASS);
 		return ScopedProxyCreator.createScopedProxy(definition, registry, proxyTargetClass);
 	}
