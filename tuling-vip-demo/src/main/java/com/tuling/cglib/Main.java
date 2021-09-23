@@ -38,9 +38,9 @@ public class Main {
 		enhancer.setInterfaces(new Class[]{UserInterface.class});
 
 		UserService userService = (UserService) enhancer.create();
-//		userService.test("zhouyu");
+		userService.test("zhouyu");
 
-		userService.b("zhouyu");
+//		userService.b("zhouyu");
 
 //		UserInterface userInterface = (UserInterface) userService;
 //		System.out.println(userInterface);

@@ -433,6 +433,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			throws BeansException {
 
 		Object result = existingBean;
+
 		for (BeanPostProcessor processor : getBeanPostProcessors()) {
 			Object current = processor.postProcessAfterInitialization(result, beanName);
 			if (current == null) {
@@ -607,7 +608,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		Object exposedObject = bean;
 		try {
 			// 属性填充
-			populateBean(beanName, mbd, instanceWrapper);
+			populateBean(beanName, mbd, instanceWrapper);  //getBean()
 
 			// 初始化
 			exposedObject = initializeBean(beanName, exposedObject, mbd);
@@ -629,6 +630,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 					exposedObject = earlySingletonReference;
 				}
 				else if (!this.allowRawInjectionDespiteWrapping && hasDependentBean(beanName)) {
+					// beanName被哪些bean依赖了，现在发现beanName所对应的bean对象发生了改变，那么则会报错
 					String[] dependentBeans = getDependentBeans(beanName);
 					Set<String> actualDependentBeans = new LinkedHashSet<>(dependentBeans.length);
 					for (String dependentBean : dependentBeans) {
@@ -1129,6 +1131,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		Object bean = null;
 		if (!Boolean.FALSE.equals(mbd.beforeInstantiationResolved)) {
 			// Make sure bean class is actually resolved at this point.
+			// synthetic表示合成，如果某些Bean式合成的，那么则不会经过BeanPostProcessor的处理
 			if (!mbd.isSynthetic() && hasInstantiationAwareBeanPostProcessors()) {
 				Class<?> targetType = determineTargetType(beanName, mbd);
 				if (targetType != null) {
@@ -1205,6 +1208,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			synchronized (mbd.constructorArgumentLock) {
 				if (mbd.resolvedConstructorOrFactoryMethod != null) {
 					resolved = true;
+					// autowireNecessary表示有没有必要要进行注入，比如当前BeanDefinition用的是无参构造方法，那么autowireNecessary为false，否则为true，表示需要给构造方法参数注入值
 					autowireNecessary = mbd.constructorArgumentsResolved;
 				}
 			}
@@ -1212,21 +1216,26 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		if (resolved) {
 			// 如果确定了当前BeanDefinition的构造方法，那么看是否需要进行对构造方法进行参数的依赖注入（构造方法注入）
 			if (autowireNecessary) {
+				// 方法内会拿到缓存好的构造方法的入参
 				return autowireConstructor(beanName, mbd, null, null);
 			}
 			else {
-				// 如果不需要注入，则表示用的是默认无参构造方法，直接进行实例化
+				// 构造方法已经找到了，但是没有参数，那就表示是无参，直接进行实例化
 				return instantiateBean(beanName, mbd);
 			}
 		}
 
+		// 如果没有找过构造方法，那么就开始找了
+
 		// Candidate constructors for autowiring?
-		// 提供一个扩展点，可以利用SmartInstantiationAwareBeanPostProcessor来控制用beanClass中的哪个构造方法
+		// 提供一个扩展点，可以利用SmartInstantiationAwareBeanPostProcessor来控制用beanClass中的哪些构造方法
+		// 比如AutowiredAnnotationBeanPostProcessor会把加了@Autowired注解的构造方法找出来，具体看代码实现会更复杂一点
 		Constructor<?>[] ctors = determineConstructorsFromBeanPostProcessors(beanClass, beanName);
 
-		// 如果ctors有值则需要进行构造方法注入，或者autowiredMode是AUTOWIRE_CONSTRUCTOR
-		// 或者BeanDefinition中添加了构造方法的参数和值，或者调用getBean()方法时传入了args
-		// 构造方法注入：首先包括
+		// 如果推断出来了构造方法，则需要给构造方法赋值，也就是给构造方法参数赋值，也就是构造方法注入
+		// 如果没有推断出来构造方法，但是autowiremode为AUTOWIRE_CONSTRUCTOR，则也可能需要给构造方法赋值，因为不确定是用无参的还是有参的构造方法
+		// 如果通过BeanDefinition指定了构造方法参数值，那肯定就是要进行构造方法注入了
+		// 如果调用getBean的时候传入了构造方法参数值，那肯定就是要进行构造方法注入了
 		if (ctors != null || mbd.getResolvedAutowireMode() == AUTOWIRE_CONSTRUCTOR ||
 				mbd.hasConstructorArgumentValues() || !ObjectUtils.isEmpty(args)) {
 			return autowireConstructor(beanName, mbd, ctors, args);
@@ -1239,8 +1248,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		}
 
 		// No special handling: simply use no-arg constructor.
-		// 如果没有@Autowired注解的构造方法，当前BeanDefinition的autowiremode也不是AUTOWIRE_CONSTRUCTOR，也没有指明所要用的构造方法参数值
-		// 则直接使用无参构造方法
+		// 不匹配以上情况，则直接使用无参构造方法
 		return instantiateBean(beanName, mbd);
 	}
 
@@ -1362,6 +1370,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 	protected BeanWrapper instantiateUsingFactoryMethod(
 			String beanName, RootBeanDefinition mbd, @Nullable Object[] explicitArgs) {
 
+		// 使用factoryBean来实例化对象
 		return new ConstructorResolver(this).instantiateUsingFactoryMethod(beanName, mbd, explicitArgs);
 	}
 
@@ -1538,6 +1547,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 					MethodParameter methodParam = BeanUtils.getWriteMethodParameter(pd);
 					// Do not allow eager init for type matching in case of a prioritized post-processor.
 					// eager表示立即初始化，表示在根据类型查找Bean时，允不允许进行Bean的创建，如果当前bean实现了PriorityOrdered，那么则不允许
+					// 为什么不允许，因为我自己是PriorityOrdered，是优先级最高的，不能有比我创建得更早的
 					boolean eager = !(bw.getWrappedInstance() instanceof PriorityOrdered);
 					DependencyDescriptor desc = new AutowireByTypeDependencyDescriptor(methodParam, eager);
 					// 根据类型找到的结果

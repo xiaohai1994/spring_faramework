@@ -20,13 +20,13 @@ public class Main {
 	public static void main(String[] args) throws IOException {
 
 
-//		AnnotationMetadata metadata = AnnotationMetadata.introspect(UserService.class);
+		AnnotationMetadata metadata = AnnotationMetadata.introspect(UserService.class);
 
-//		System.out.println(metadata.hasAnnotation(Service.class.getName()));		// true
-//		System.out.println(metadata.hasMetaAnnotation(Service.class.getName()));	// false
-//
-//		System.out.println(metadata.hasAnnotation(Component.class.getName()));		// false
-//		System.out.println(metadata.hasMetaAnnotation(Component.class.getName()));	// true
+		System.out.println(metadata.hasAnnotation(Service.class.getName()));		// true
+		System.out.println(metadata.hasMetaAnnotation(Service.class.getName()));	// false
+
+		System.out.println(metadata.hasAnnotation(Component.class.getName()));		// false
+		System.out.println(metadata.hasMetaAnnotation(Component.class.getName()));	// true
 //
 //		System.out.println(metadata.hasAnnotatedMethods(Bean.class.getName()));		// true
 

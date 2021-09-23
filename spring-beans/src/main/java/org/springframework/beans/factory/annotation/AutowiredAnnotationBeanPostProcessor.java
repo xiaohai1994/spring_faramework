@@ -260,6 +260,7 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 
 		// Let's check for lookup methods here...
 		if (!this.lookupMethodsChecked.contains(beanName)) {
+			// 判断beanClass是不是java.开头的类，比如String
 			if (AnnotationUtils.isCandidateClass(beanClass, Lookup.class)) {
 				try {
 					Class<?> targetClass = beanClass;
@@ -304,6 +305,7 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 				if (candidateConstructors == null) {
 					Constructor<?>[] rawCandidates;
 					try {
+						// 拿到所有的构造方法
 						rawCandidates = beanClass.getDeclaredConstructors();
 					}
 					catch (Throwable ex) {
@@ -313,7 +315,9 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 					}
 					List<Constructor<?>> candidates = new ArrayList<>(rawCandidates.length);
 
+					// 用来记录required为true的构造方法，一个类中只能有一个required为true的构造方法
 					Constructor<?> requiredConstructor = null;
+					// 用来记录默认无参的构造方法
 					Constructor<?> defaultConstructor = null;
 					// kotlin相关，不用管
 					Constructor<?> primaryConstructor = BeanUtils.findPrimaryConstructor(beanClass);
@@ -367,8 +371,11 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 								// 记录唯一一个required为true的构造方法
 								requiredConstructor = candidate;
 							}
-							// 记录所有加了@Autowired的构造方法
+							// 记录所有加了@Autowired的构造方法，不管required是true还是false
+							// 如果默认无参的构造方法上也加了@Autowired，那么也会加到candidates中
 							candidates.add(candidate);
+
+							// 从上面代码可以得到一个结论，在一个类中，要么只能有一个required为true的构造方法，要么只能有一个或多个required为false的方法
 						}
 						else if (candidate.getParameterCount() == 0) {
 							// 记录唯一一个无参的构造方法
@@ -490,6 +497,7 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 	}
 
 	private InjectionMetadata buildAutowiringMetadata(final Class<?> clazz) {
+		// 如果一个Bean的类型是String...，那么则根本不需要进行依赖注入
 		if (!AnnotationUtils.isCandidateClass(clazz, this.autowiredAnnotationTypes)) {
 			return InjectionMetadata.EMPTY;
 		}
@@ -636,6 +644,7 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 	@Nullable
 	private Object resolvedCachedArgument(@Nullable String beanName, @Nullable Object cachedArgument) {
 		if (cachedArgument instanceof DependencyDescriptor) {
+			// ShortcutDependencyDescriptor
 			DependencyDescriptor descriptor = (DependencyDescriptor) cachedArgument;
 			Assert.state(this.beanFactory != null, "No BeanFactory available");
 			return this.beanFactory.resolveDependency(descriptor, beanName, null, null);
@@ -665,9 +674,13 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 
 		@Override
 		protected void inject(Object bean, @Nullable String beanName, @Nullable PropertyValues pvs) throws Throwable {
+
 			Field field = (Field) this.member;
 			Object value;
 			if (this.cached) {
+				// 对于原型Bean，第一次创建的时候，也找注入点，然后进行注入，此时cached为false，注入完了之后cached为true
+				// 第二次创建的时候，先找注入点（此时会拿到缓存好的注入点），也就是AutowiredFieldElement对象，此时cache为true，也就进到此处了
+				// 注入点内并没有缓存被注入的具体Bean对象，而是beanName，这样就能保证注入到不同的原型Bean对象
 				try {
 					value = resolvedCachedArgument(beanName, this.cachedFieldValue);
 				}
@@ -693,6 +706,7 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 
 			DependencyDescriptor desc = new DependencyDescriptor(field, this.required);
 			desc.setContainingClass(bean.getClass());
+
 			Set<String> autowiredBeanNames = new LinkedHashSet<>(1);
 			Assert.state(beanFactory != null, "No BeanFactory available");
 			TypeConverter typeConverter = beanFactory.getTypeConverter();
@@ -708,7 +722,7 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 					Object cachedFieldValue = null;
 					if (value != null || this.required) {
 						cachedFieldValue = desc;
-						// 注册一下beanName依赖了autowiredBeanNames
+						// 注册一下beanName依赖了autowiredBeanNames，
 						registerDependentBeans(beanName, autowiredBeanNames);
 						if (autowiredBeanNames.size() == 1) {
 							String autowiredBeanName = autowiredBeanNames.iterator().next();
@@ -748,6 +762,7 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 
 		@Override
 		protected void inject(Object bean, @Nullable String beanName, @Nullable PropertyValues pvs) throws Throwable {
+			// 如果pvs中已经有当前注入点的值了，则跳过注入
 			if (checkPropertySkipping(pvs)) {
 				return;
 			}
@@ -801,6 +816,7 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 			// 遍历每个方法参数，找到匹配的bean对象
 			for (int i = 0; i < arguments.length; i++) {
 				MethodParameter methodParam = new MethodParameter(method, i);
+
 				DependencyDescriptor currDesc = new DependencyDescriptor(methodParam, this.required);
 				currDesc.setContainingClass(bean.getClass());
 				descriptors[i] = currDesc;

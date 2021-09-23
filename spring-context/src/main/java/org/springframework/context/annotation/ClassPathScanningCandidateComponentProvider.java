@@ -378,6 +378,7 @@ public class ClassPathScanningCandidateComponentProvider implements EnvironmentC
 		try {
 			Set<String> types = new HashSet<>();
 			for (TypeFilter filter : this.includeFilters) {
+				// Component注解
 				String stereotype = extractStereotype(filter);
 				if (stereotype == null) {
 					throw new IllegalArgumentException("Failed to extract stereotype from " + filter);
@@ -436,6 +437,7 @@ public class ClassPathScanningCandidateComponentProvider implements EnvironmentC
 						if (isCandidateComponent(metadataReader)) {
 							ScannedGenericBeanDefinition sbd = new ScannedGenericBeanDefinition(metadataReader);
 							sbd.setSource(resource);
+
 							if (isCandidateComponent(sbd)) {
 								if (debugEnabled) {
 									logger.debug("Identified candidate component class: " + resource);

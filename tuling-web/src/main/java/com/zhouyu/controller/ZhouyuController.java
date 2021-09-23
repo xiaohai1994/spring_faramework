@@ -14,7 +14,7 @@ public class ZhouyuController {  // Bean
 
 	@GetMapping("/test")
 	public String test() {
-		return "test---zhouyu";
+		return zhouyuService.test();
 	}
 
 }

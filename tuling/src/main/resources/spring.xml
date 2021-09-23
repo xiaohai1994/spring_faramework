@@ -8,7 +8,9 @@
 	   http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/aop https://www.springframework.org/schema/aop/spring-aop.xsd"
 	   >
 
+<!--	<bean id="userService" factory-bean="orderService" factory-method="create" />-->
+	<bean id="userService" class="com.zhouyu.service.OrderService" factory-method="create" />
 
-	<context:component-scan base-package="com.zhouyu"/>
+	<bean id="orderService" class="com.zhouyu.service.OrderService" />
 
 </beans>

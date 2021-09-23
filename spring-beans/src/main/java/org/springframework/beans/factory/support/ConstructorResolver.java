@@ -150,7 +150,6 @@ class ConstructorResolver {
 					}
 				}
 			}
-			// 如果缓存了构造方法和参数对象，则对参数对象进一步进行解析，以及和参数类型进行匹配和转化
 			if (argsToResolve != null) {
 				argsToUse = resolvePreparedArguments(beanName, mbd, bw, constructorToUse, argsToResolve);
 			}
@@ -204,6 +203,7 @@ class ConstructorResolver {
 				// 如果通过BeanDefinition传了构造方法参数值，因为有可能是通过下标指定了，比如0位置的值，2位置的值，虽然只指定了2个值，但是构造方法的参数个数至少得是3个
 				ConstructorArgumentValues cargs = mbd.getConstructorArgumentValues();
 				resolvedValues = new ConstructorArgumentValues();
+				// 处理RuntimeBeanReference
 				minNrOfArgs = resolveConstructorArguments(beanName, mbd, bw, cargs, resolvedValues);
 			}
 
@@ -231,7 +231,7 @@ class ConstructorResolver {
 
 				ArgumentsHolder argsHolder;
 				Class<?>[] paramTypes = candidate.getParameterTypes();
-				// 如果通过BeanDefinition指定了构造方法参数值
+				// 没有通过getBean()指定构造方法参数值
 				if (resolvedValues != null) {
 					try {
 						// 如果在构造方法上使用了@ConstructorProperties，那么就直接取定义的值作为构造方法的参数名
@@ -273,6 +273,7 @@ class ConstructorResolver {
 				}
 
 				// 当前遍历的构造方法所需要的入参对象都找到了，根据参数类型和找到的参数对象计算出来一个匹配值，值越小越匹配
+				// Lenient表示宽松模式
 				int typeDiffWeight = (mbd.isLenientConstructorResolution() ?
 						argsHolder.getTypeDifferenceWeight(paramTypes) : argsHolder.getAssignabilityWeight(paramTypes));
 				// Choose this constructor if it represents the closest match.
@@ -293,7 +294,7 @@ class ConstructorResolver {
 					ambiguousConstructors.add(candidate);
 				}
 			}
-			// 遍历结束
+			// 遍历结束   x
 
 			// 如果没有可用的构造方法，就取记录的最后一个异常并抛出
 			if (constructorToUse == null) {
@@ -431,6 +432,7 @@ class ConstructorResolver {
 		Class<?> factoryClass;
 		boolean isStatic;
 
+		// 注意，这里拿到的是factoryBeanName，而不是factoryMethodName，比如AppConfig对象
 		String factoryBeanName = mbd.getFactoryBeanName();
 		if (factoryBeanName != null) {
 			if (factoryBeanName.equals(beanName)) {
@@ -438,6 +440,8 @@ class ConstructorResolver {
 						"factory-bean reference points back to the same bean definition");
 			}
 			factoryBean = this.beanFactory.getBean(factoryBeanName);
+
+			// 该单例已经创建好了？
 			if (mbd.isSingleton() && this.beanFactory.containsSingleton(beanName)) {
 				throw new ImplicitlyAppearedSingletonException();
 			}
@@ -447,6 +451,7 @@ class ConstructorResolver {
 		}
 		else {
 			// It's a static factory method on the bean class.
+			// static的@Bean方法
 			if (!mbd.hasBeanClass()) {
 				throw new BeanDefinitionStoreException(mbd.getResourceDescription(), beanName,
 						"bean definition declares neither a bean class nor a factory-bean reference");
@@ -494,6 +499,8 @@ class ConstructorResolver {
 					candidates = Collections.singletonList(factoryMethodToUse);
 				}
 			}
+
+			// 找到对应的@Bean方法，由于可能参数重载，所以有可能会有多个
 			if (candidates == null) {
 				candidates = new ArrayList<>();
 				Method[] rawCandidates = getCandidateMethods(factoryClass, mbd);
@@ -563,6 +570,8 @@ class ConstructorResolver {
 					else {
 						// Resolved constructor arguments: type conversion and/or autowiring necessary.
 						try {
+
+							// 根据参数类型和参数名找Bean
 							String[] paramNames = null;
 							ParameterNameDiscoverer pnd = this.beanFactory.getParameterNameDiscoverer();
 							if (pnd != null) {
@@ -719,6 +728,7 @@ class ConstructorResolver {
 				resolvedValues.addIndexedArgumentValue(index, valueHolder);
 			}
 			else {
+				// 会处理RuntimeBeanReference
 				Object resolvedValue =
 						valueResolver.resolveValueIfNecessary("constructor argument", valueHolder.getValue());
 				ConstructorArgumentValues.ValueHolder resolvedValueHolder =
@@ -1001,7 +1011,7 @@ class ConstructorResolver {
 
 			// 最终值和类型的匹配程度
 			int typeDiffWeight = MethodInvoker.getTypeDifferenceWeight(paramTypes, this.arguments);
-			// 原始值和类型的匹配程度，并减掉1024，使得原始值的匹配值更优秀，意思就是优秀根据原始值来算匹配值
+			// 原始值和类型的匹配程度，并减掉1024，使得原始值的匹配值更优先，意思就是优先根据原始值来算匹配值
 			int rawTypeDiffWeight = MethodInvoker.getTypeDifferenceWeight(paramTypes, this.rawArguments) - 1024;
 			// 取最小值
 			return Math.min(rawTypeDiffWeight, typeDiffWeight);

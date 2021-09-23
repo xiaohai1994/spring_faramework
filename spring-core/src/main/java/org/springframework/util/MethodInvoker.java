@@ -318,7 +318,7 @@ public class MethodInvoker {
 
 				// 值的类型与当前类型隔得越远，分数将越高，表示偏离的越多
 				while (superClass != null) {
-					// 值的父类等于当前类型
+					// 值的父类等于当前参数类型
 					if (paramType.equals(superClass)) {
 						result = result + 2;
 						superClass = null;

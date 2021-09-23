@@ -146,14 +146,14 @@ public class QualifierAnnotationAutowireCandidateResolver extends GenericTypeAwa
 		// 先执行上层判断，如果匹配成功，在由自己匹配
 		boolean match = super.isAutowireCandidate(bdHolder, descriptor);
 		if (match) {
-			// 拿到descriptor所对应的属性上的所有注解，检查是否有@Qualifier，如果有，看是否和当前bdHolder匹配
+			// descriptor.getAnnotations()拿得是属性或方法参数前的注解，拿不到方法上的注解
 			match = checkQualifiers(bdHolder, descriptor.getAnnotations());
 			if (match) {
 				MethodParameter methodParam = descriptor.getMethodParameter();
 				if (methodParam != null) {
 					Method method = methodParam.getMethod();
 					if (method == null || void.class == method.getReturnType()) {
-						// 方法参数前写的@Qualifier
+						// methodParam.getMethodAnnotations()实际上拿得的是方法上的注解
 						match = checkQualifiers(bdHolder, methodParam.getMethodAnnotations());
 					}
 				}
@@ -176,7 +176,8 @@ public class QualifierAnnotationAutowireCandidateResolver extends GenericTypeAwa
 			boolean fallbackToMeta = false;
 			// 当前注解是否是Qualifier
 			if (isQualifier(type)) {
-				// 属性上存在@Qualifier
+				// 当前注解是否是Qualifier，如果和当前BeanDefinition不匹配，则fallbackToMeta为true, checkMeta依然为true
+				// 比如@Random，它自己可以有一个value属性，并且上面还有一个@Qualifier("random")
 				if (!checkQualifier(bdHolder, annotation, typeConverter)) {
 					fallbackToMeta = true;
 				}
@@ -229,6 +230,7 @@ public class QualifierAnnotationAutowireCandidateResolver extends GenericTypeAwa
 		Class<? extends Annotation> type = annotation.annotationType();
 		RootBeanDefinition bd = (RootBeanDefinition) bdHolder.getBeanDefinition();
 
+		// 首先判断BeanDefinition有没有指定类型的限定符
 		AutowireCandidateQualifier qualifier = bd.getQualifier(type.getName());
 		if (qualifier == null) {
 			qualifier = bd.getQualifier(ClassUtils.getShortName(type));
@@ -269,6 +271,8 @@ public class QualifierAnnotationAutowireCandidateResolver extends GenericTypeAwa
 				return true;
 			}
 		}
+
+
 
 		Map<String, Object> attributes = AnnotationUtils.getAnnotationAttributes(annotation);
 		if (attributes.isEmpty() && qualifier == null) {

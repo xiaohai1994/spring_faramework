@@ -2,10 +2,11 @@ package com.zhouyu;
 
 
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 
 @ComponentScan(value = "com.zhouyu")
-public final class AppConfig {
-
+@Configuration
+public class AppConfig {
 
 //	@Bean
 //	public JdbcTemplate jdbcTemplate() {

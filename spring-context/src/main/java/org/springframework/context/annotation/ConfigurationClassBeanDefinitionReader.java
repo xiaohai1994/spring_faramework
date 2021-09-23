@@ -219,7 +219,10 @@ class ConfigurationClassBeanDefinitionReader {
 		}
 
 		// Has this effectively been overridden before (e.g. via XML)?
+		// 如果出现了两个@Bean修改的方法名字一样（比如方法重载了），则直接return，并且会把已经存在的BeanDefinition的isFactoryMethodUnique为false
 		if (isOverriddenByExistingDefinition(beanMethod, beanName)) {
+
+			// 如果beanName等于"appConfig"，就会抛异常
 			if (beanName.equals(beanMethod.getConfigurationClass().getBeanName())) {
 				throw new BeanDefinitionStoreException(beanMethod.getConfigurationClass().getResource().getDescription(),
 						beanName, "Bean name derived from @Bean method '" + beanMethod.getMetadata().getMethodName() +
@@ -317,6 +320,9 @@ class ConfigurationClassBeanDefinitionReader {
 			ConfigurationClassBeanDefinition ccbd = (ConfigurationClassBeanDefinition) existingBeanDef;
 			if (ccbd.getMetadata().getClassName().equals(
 					beanMethod.getConfigurationClass().getMetadata().getClassName())) {
+
+				// 如果@Bean对应的beanName已经存在BeanDefinition，那么则把此BeanDefinition的isFactoryMethodUnique设置为false
+				// 等到后续根据此BeanDefinition去创建Bean时，就知道不止一个对应方法了，要推断了
 				if (ccbd.getFactoryMethodMetadata().getMethodName().equals(ccbd.getFactoryMethodName())) {
 					ccbd.setNonUniqueFactoryMethodName(ccbd.getFactoryMethodMetadata().getMethodName());
 				}
