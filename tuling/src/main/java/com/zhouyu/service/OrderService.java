@@ -1,6 +1,6 @@
 package com.zhouyu.service;
 
-import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 /**
@@ -8,5 +8,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class OrderService {
+
+
 
 }
