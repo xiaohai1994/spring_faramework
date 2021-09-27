@@ -1,5 +1,7 @@
 package com.tuling.cglib;
 
+import com.tuling.UserInterface;
+import com.tuling.UserService;
 import org.springframework.cglib.proxy.*;
 
 import java.lang.reflect.Method;
@@ -38,7 +40,7 @@ public class Main {
 		enhancer.setInterfaces(new Class[]{UserInterface.class});
 
 		UserService userService = (UserService) enhancer.create();
-		userService.test("zhouyu");
+		userService.test();
 
 //		userService.b("zhouyu");
 

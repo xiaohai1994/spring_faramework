@@ -1,9 +1,7 @@
 package com.tuling.aop;
 
+import com.tuling.UserService;
 import com.tuling.aop.advice.ZhouyuAfterReturningAdvise;
-import com.tuling.aop.advice.ZhouyuAroundAdvise;
-import com.tuling.aop.service.UserService;
-import org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.aop.support.DefaultPointcutAdvisor;
 import org.springframework.aop.support.NameMatchMethodPointcut;
@@ -23,7 +21,7 @@ public class DefaultAdvisorAutoProxyCreatorDemo {
 	}
 
 	@Bean
-	public DefaultPointcutAdvisor defaultPointcutAdvisor(){
+	public DefaultPointcutAdvisor defaultPointcutAdvisor() {
 		NameMatchMethodPointcut pointcut = new NameMatchMethodPointcut();
 		pointcut.addMethodName("test");
 
@@ -37,7 +35,6 @@ public class DefaultAdvisorAutoProxyCreatorDemo {
 	@Bean
 	public DefaultAdvisorAutoProxyCreator defaultAdvisorAutoProxyCreator() {
 		DefaultAdvisorAutoProxyCreator defaultAdvisorAutoProxyCreator = new DefaultAdvisorAutoProxyCreator();
-		defaultAdvisorAutoProxyCreator.setAdvisorBeanNamePrefix("defaultPoin");
 		defaultAdvisorAutoProxyCreator.setProxyTargetClass(true);
 
 		return defaultAdvisorAutoProxyCreator;

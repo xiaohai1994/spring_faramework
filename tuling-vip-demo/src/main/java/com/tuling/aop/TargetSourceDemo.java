@@ -1,8 +1,7 @@
 package com.tuling.aop;
 
+import com.tuling.UserService;
 import com.tuling.aop.advice.ZhouyuBeforeAdvise;
-import com.tuling.aop.service.UserInterface;
-import com.tuling.aop.service.UserService;
 import org.springframework.aop.TargetSource;
 import org.springframework.aop.framework.ProxyFactory;
 

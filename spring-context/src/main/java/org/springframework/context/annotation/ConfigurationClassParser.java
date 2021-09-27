@@ -191,6 +191,8 @@ class ConfigurationClassParser {
 			}
 		}
 
+		// 处理deferredImportSelectors，表示当前所有配置类解析完了之后才执行
+		// deferredImportSelector表示推迟的ImportSelector，正常的ImportSelector是在解析配置类的过程中执行的
 		this.deferredImportSelectorHandler.process();
 	}
 
@@ -389,6 +391,7 @@ class ConfigurationClassParser {
 			for (SourceClass candidate : candidates) {
 				// AppConfig中有一个内部类A， A上用@Import导入AppConfig.class，就出现了循环import
 				if (this.importStack.contains(configClass)) {
+					// 就是直接抛异常
 					this.problemReporter.error(new CircularImportProblem(configClass, this.importStack));
 				}
 				else {
@@ -608,7 +611,7 @@ class ConfigurationClassParser {
 						} else {
 							// 如果import的是普通的ImportSelector
 							String[] importClassNames = selector.selectImports(currentSourceClass.getMetadata());
-							// 继续处理所import进来的类
+							// 继续处理selectImports()所返回的类
 							Collection<SourceClass> importSourceClasses = asSourceClasses(importClassNames, exclusionFilter);
 							processImports(configClass, currentSourceClass, importSourceClasses, exclusionFilter, false);
 						}

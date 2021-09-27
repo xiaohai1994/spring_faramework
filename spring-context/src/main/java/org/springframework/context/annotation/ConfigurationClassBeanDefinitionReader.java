@@ -160,7 +160,7 @@ class ConfigurationClassBeanDefinitionReader {
 		// 处理@ImportResource("spring.xml")
 		loadBeanDefinitionsFromImportedResources(configClass.getImportedResources());
 
-		// 处理ImportBeanDefinitionRegistrar
+		// 处理ImportBeanDefinitionRegistrar，调用registerBeanDefinitions()方法
 		loadBeanDefinitionsFromRegistrars(configClass.getImportBeanDefinitionRegistrars());
 	}
 

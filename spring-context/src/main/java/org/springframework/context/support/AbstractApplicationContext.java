@@ -344,6 +344,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	 * a custom {@link ConfigurableEnvironment} implementation.
 	 */
 	protected ConfigurableEnvironment createEnvironment() {
+		// 会先执行StandardEnvironment的父类的无参构造方法，会将操作系统与JVM环境变量添加到Environment中
 		return new StandardEnvironment();
 	}
 
@@ -550,11 +551,12 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 			prepareRefresh();
 
 			// Tell the subclass to refresh the internal bean factory.
+			// 这里会判断能否刷新，并且返回一个BeanFactory, 刷新不代表完全情况，主要是先执行Bean的销毁，然后重新生成一个BeanFactory，再在接下来的步骤中重新去扫描等等
 			ConfigurableListableBeanFactory beanFactory = obtainFreshBeanFactory();
 
 			// Prepare the bean factory for use in this context.
 			// 准备BeanFactory
-			// 1. 设置BeanFactory的类加载器、表达式解析器、类型转化注册器
+			// 1. 设置BeanFactory的类加载器、SpringEL表达式解析器、类型转化注册器
 			// 2. 添加三个BeanPostProcessor，注意是具体的BeanPostProcessor实例对象
 			// 3. 记录ignoreDependencyInterface
 			// 4. 记录ResolvableDependency
@@ -575,11 +577,12 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 				// 而这6个中只有一个BeanFactoryPostProcessor：ConfigurationClassPostProcessor
 				// 这里会执行ConfigurationClassPostProcessor进行@Component的扫描，扫描得到BeanDefinition，并注册到beanFactory中
 				// 注意：扫描的过程中可能又会扫描出其他的BeanFactoryPostProcessor，那么这些BeanFactoryPostProcessor也得在这一步执行
-				invokeBeanFactoryPostProcessors(beanFactory);
+				invokeBeanFactoryPostProcessors(beanFactory);  // scanner.scan()
 
 				// Register bean processors that intercept bean creation.
 				// 将扫描到的BeanPostProcessors实例化并排序，并添加到BeanFactory的beanPostProcessors属性中去
 				registerBeanPostProcessors(beanFactory);
+
 				beanPostProcess.end();
 
 				// Initialize message source for this context.
@@ -650,6 +653,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		}
 
 		// Initialize any placeholder property sources in the context environment.
+		// 比如子类可以把ServletContext中的参数对设置到Environment
 		initPropertySources();
 
 		// Validate that all properties marked as required are resolvable:
@@ -934,7 +938,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		// Register a default embedded value resolver if no BeanFactoryPostProcessor
 		// (such as a PropertySourcesPlaceholderConfigurer bean) registered any before:
 		// at this point, primarily for resolution in annotation attribute values.
-		// 设置默认的占位符解析器
+		// 设置默认的占位符解析器  ${xxx}  ---key
 		if (!beanFactory.hasEmbeddedValueResolver()) {
 			beanFactory.addEmbeddedValueResolver(strVal -> getEnvironment().resolvePlaceholders(strVal));
 		}
@@ -971,6 +975,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		initLifecycleProcessor();
 
 		// Propagate refresh to lifecycle processor first.
+		// 调用LifecycleBean的start()
 		getLifecycleProcessor().onRefresh();
 
 		// Publish the final event.

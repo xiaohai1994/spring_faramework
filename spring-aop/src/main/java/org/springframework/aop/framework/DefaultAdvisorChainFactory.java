@@ -81,8 +81,8 @@ public class DefaultAdvisorChainFactory implements AdvisorChainFactory, Serializ
 						match = mm.matches(method, actualClass);
 					}
 
-					// 如果匹配则将Advisor封装成为Interceptor
 					if (match) {
+						// 如果匹配则将Advisor封装成为Interceptor，当前Advisor中的Advice可能即是MethodBeforeAdvice，也是ThrowsAdvice
 						MethodInterceptor[] interceptors = registry.getInterceptors(advisor);
 						if (mm.isRuntime()) {
 							// Creating a new object instance in the getInterceptors() method
@@ -95,6 +95,9 @@ public class DefaultAdvisorChainFactory implements AdvisorChainFactory, Serializ
 							interceptorList.addAll(Arrays.asList(interceptors));
 						}
 					}
+
+					// 最终，interceptorList中存储的是当前正在执行的Method所匹配的MethodInterceptor，可能动态的，也可能是非动态的，
+					// 找到Method所匹配的MethodInterceptor后，就会开始调用这些MethodInterceptor，如果是动态的，会额外进行方法参数的匹配
 				}
 			}
 			else if (advisor instanceof IntroductionAdvisor) {

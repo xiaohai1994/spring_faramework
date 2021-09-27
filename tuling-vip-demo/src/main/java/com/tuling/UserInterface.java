@@ -1,4 +1,4 @@
-package com.tuling.cglib;
+package com.tuling;
 
 /**
  * @author 周瑜

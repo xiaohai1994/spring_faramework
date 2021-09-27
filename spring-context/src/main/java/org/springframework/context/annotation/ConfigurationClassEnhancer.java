@@ -314,7 +314,7 @@ class ConfigurationClassEnhancer {
 				}
 			}
 
-			// 如果代理对象真正执行的方法就是正在创建Bean的工厂方法，那就直接执行对应的方法得到对象作为Bean
+			// 如果代理对象正在执行的方法就是正在创建Bean的工厂方法，那就直接执行对应的方法得到对象作为Bean
 			if (isCurrentlyInvokedFactoryMethod(beanMethod)) {
 				// The factory is calling the bean method in order to instantiate and register the bean
 				// (i.e. via a getBean() call) -> invoke the super implementation of the method to actually
@@ -329,7 +329,7 @@ class ConfigurationClassEnhancer {
 									"these container lifecycle issues; see @Bean javadoc for complete details.",
 							beanMethod.getDeclaringClass().getSimpleName(), beanMethod.getName()));
 				}
-				// 注入这里传入的是代理对象，相当于在执行父类的方法，注意和Spring事务做区分
+				// 注意这里传入的是代理对象，相当于在执行父类的方法，注意和Spring事务做区分
 				return cglibMethodProxy.invokeSuper(enhancedConfigInstance, beanMethodArgs);
 			}
 

@@ -79,7 +79,7 @@ final class PostProcessorRegistrationDelegate {
 	 * ConfigurationClassPostProcessor就会在第2步执行，会进行扫描
 	 */
 	public static void invokeBeanFactoryPostProcessors(
-			ConfigurableListableBeanFactory beanFactory, List<BeanFactoryPostProcessor> beanFactoryPostProcessors) {
+			ConfigurableListableBeanFactory beanFactory, List<BeanFactoryPostProcessor> beanFactoryPostProcessors) {   // BeanFactoryPostProcessor、BeanDefinitionRegistryPostProcessor
 
 		// Invoke BeanDefinitionRegistryPostProcessors first, if any.
 		Set<String> processedBeans = new HashSet<>();
@@ -237,6 +237,7 @@ final class PostProcessorRegistrationDelegate {
 		// Register BeanPostProcessorChecker that logs an info message when
 		// a bean is created during BeanPostProcessor instantiation, i.e. when
 		// a bean is not eligible for getting processed by all BeanPostProcessors.
+		// beanProcessorTargetCount表示BeanFactory中所有的BeanPostProcessor数量，+1表示BeanPostProcessorChecker
 		int beanProcessorTargetCount = beanFactory.getBeanPostProcessorCount() + 1 + postProcessorNames.length;
 		beanFactory.addBeanPostProcessor(new BeanPostProcessorChecker(beanFactory, beanProcessorTargetCount));
 
@@ -387,6 +388,8 @@ final class PostProcessorRegistrationDelegate {
 
 		@Override
 		public Object postProcessAfterInitialization(Object bean, String beanName) {
+			// 在创建某个BeanPostProcessor的时候，额外还创建了一个其他的Bean
+			// getBeanPostProcessorCount()拿到的是beanPostProcessors是的值，beanPostProcessorTargetCount是BeanPostProcessor对应的BeanDefinition的个数
 			if (!(bean instanceof BeanPostProcessor) && !isInfrastructureBean(beanName) &&
 					this.beanFactory.getBeanPostProcessorCount() < this.beanPostProcessorTargetCount) {
 				if (logger.isInfoEnabled()) {
