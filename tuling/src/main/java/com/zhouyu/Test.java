@@ -8,7 +8,7 @@ public class Test {
 	public static void main(String[] args) {
 
 		AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext(AppConfig.class);
-		UserService userService = applicationContext.getBean("userService", UserService.class);
+		UserService userService = (UserService) applicationContext.getBean("userService");
 		userService.test();
 
 	}
