@@ -1,7 +1,7 @@
 package com.tuling.aop;
 
 import com.tuling.UserService;
-import com.tuling.aop.advice.ZhouyuAfterReturningAdvise;
+import com.tuling.aop.advice.ZhouyuAfterReturningAdvice;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.aop.support.DefaultPointcutAdvisor;
 import org.springframework.aop.support.NameMatchMethodPointcut;
@@ -27,7 +27,7 @@ public class DefaultAdvisorAutoProxyCreatorDemo {
 
 		DefaultPointcutAdvisor defaultPointcutAdvisor = new DefaultPointcutAdvisor();
 		defaultPointcutAdvisor.setPointcut(pointcut);
-		defaultPointcutAdvisor.setAdvice(new ZhouyuAfterReturningAdvise());
+		defaultPointcutAdvisor.setAdvice(new ZhouyuAfterReturningAdvice());
 
 		return defaultPointcutAdvisor;
 	}

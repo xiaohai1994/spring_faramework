@@ -8,7 +8,7 @@ import java.lang.reflect.Method;
 /**
  * @author 周瑜
  */
-public class ZhouyuAfterReturningAdvise implements AfterReturningAdvice {
+public class ZhouyuAfterReturningAdvice implements AfterReturningAdvice {
 
 	@Override
 	public void afterReturning(Object returnValue, Method method, Object[] args, Object target) throws Throwable {

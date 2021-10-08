@@ -11,7 +11,7 @@ import java.lang.reflect.Method;
 /**
  * @author 周瑜
  */
-public class ZhouyuAroundAdvise implements MethodInterceptor {
+public class ZhouyuAroundAdvice implements MethodInterceptor {
 
 	@Nullable
 	@Override

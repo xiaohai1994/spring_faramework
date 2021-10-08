@@ -17,6 +17,7 @@ public class ZhouyuSpringApplication {
 		applicationContext.register(config);
 		applicationContext.refresh();
 
+		// pom.xml  @Conditional
 		startTomcat(applicationContext);
 
 		return applicationContext;
@@ -49,7 +50,8 @@ public class ZhouyuSpringApplication {
 		service.setContainer(engine);
 		service.addConnector(connector);
 
-		tomcat.addServlet(contextPath, "dispatcher", new DispatcherServlet(applicationContext));
+		DispatcherServlet dispatcherServlet = applicationContext.getBean(DispatcherServlet.class);
+		tomcat.addServlet(contextPath, "dispatcher", dispatcherServlet);
 		context.addServletMappingDecoded("/*", "dispatcher");
 
 		try {

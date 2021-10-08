@@ -11,6 +11,7 @@ public class UserService implements UserInterface {
 
 	public void test(String s) {
 		System.out.println("test args...");
+		throw new NullPointerException();
 	}
 
 

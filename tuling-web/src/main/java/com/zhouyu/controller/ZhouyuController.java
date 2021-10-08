@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class ZhouyuController {  // Bean
+public class ZhouyuController {  // Bean Spring容器
 
 	@Autowired
 	private ZhouyuService zhouyuService;

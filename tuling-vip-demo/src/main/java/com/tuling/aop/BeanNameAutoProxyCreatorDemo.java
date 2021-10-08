@@ -1,7 +1,7 @@
 package com.tuling.aop;
 
 import com.tuling.UserService;
-import com.tuling.aop.advice.ZhouyuAroundAdvise;
+import com.tuling.aop.advice.ZhouyuAroundAdvice;
 import org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -19,8 +19,8 @@ public class BeanNameAutoProxyCreatorDemo {
 	}
 
 	@Bean
-	public ZhouyuAroundAdvise zhouyuAroundAdvise() {
-		return new ZhouyuAroundAdvise();
+	public ZhouyuAroundAdvice zhouyuAroundAdvise() {
+		return new ZhouyuAroundAdvice();
 	}
 
 	@Bean

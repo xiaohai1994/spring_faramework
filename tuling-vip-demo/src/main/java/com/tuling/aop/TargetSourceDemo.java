@@ -1,7 +1,7 @@
 package com.tuling.aop;
 
 import com.tuling.UserService;
-import com.tuling.aop.advice.ZhouyuBeforeAdvise;
+import com.tuling.aop.advice.ZhouyuBeforeAdvice;
 import org.springframework.aop.TargetSource;
 import org.springframework.aop.framework.ProxyFactory;
 
@@ -34,7 +34,7 @@ public class TargetSourceDemo {
 			}
 		});
 
-		proxyFactory.addAdvice(new ZhouyuBeforeAdvise());
+		proxyFactory.addAdvice(new ZhouyuBeforeAdvice());
 		proxyFactory.setProxyTargetClass(true);
 		proxyFactory.setFrozen(true); // frozen和static都为true，可以使得代理对象执行方法是保证被代理对象是同一个
 

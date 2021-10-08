@@ -108,6 +108,7 @@ public class BeanFactoryAspectJAdvisorsBuilder {
 						}
 						if (this.advisorFactory.isAspect(beanType)) {
 							aspectNames.add(beanName);
+							// 切面的注解信息
 							AspectMetadata amd = new AspectMetadata(beanType, beanName);
 
 							// 如果@Aspect不是perthis、pertarget，那么一个切面只会生成一个对象（单例）

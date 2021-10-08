@@ -16,6 +16,7 @@ dependencies {
     compile(project(":spring-webmvc"))
     compile(project(":spring-core"))
     compile(project(":spring-web"))
+    compile(project(":spring-context-support"))
 
     // https://mvnrepository.com/artifact/org.apache.tomcat.embed/tomcat-embed-core
     compile group: 'org.apache.tomcat.embed', name: 'tomcat-embed-core', version: '9.0.45'

@@ -8,7 +8,7 @@ import java.lang.reflect.Method;
 /**
  * @author 周瑜
  */
-public class ZhouyuBeforeAdvise implements MethodBeforeAdvice {
+public class ZhouyuBeforeAdvice implements MethodBeforeAdvice {
 
 	@Override
 	public void before(Method method, Object[] args, Object target) throws Throwable {

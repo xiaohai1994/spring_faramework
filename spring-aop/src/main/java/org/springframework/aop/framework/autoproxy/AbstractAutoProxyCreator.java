@@ -265,6 +265,7 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 			if (StringUtils.hasLength(beanName)) {
 				this.targetSourcedBeans.add(beanName);
 			}
+			// 直接去生成代理对象
 			Object[] specificInterceptors = getAdvicesAndAdvisorsForBean(beanClass, beanName, targetSource);
 			Object proxy = createProxy(beanClass, beanName, specificInterceptors, targetSource);
 			this.proxyTypes.put(cacheKey, proxy.getClass());
@@ -328,6 +329,8 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 		if (StringUtils.hasLength(beanName) && this.targetSourcedBeans.contains(beanName)) {
 			return bean;
 		}
+
+		// advisedBeans表示已经判断过了的bean，false表示此bean不需要进行Aop
 		if (Boolean.FALSE.equals(this.advisedBeans.get(cacheKey))) {
 			return bean;
 		}
@@ -467,7 +470,7 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 		}
 
 		Advisor[] advisors = buildAdvisors(beanName, specificInterceptors);
-		// 如果使用了@DeclareParents，那么在添加advisor时，会把对应的接口添加到ProxyFactory中
+		// 在这一步会去判断advisors中是否存在IntroductionAdvisor，如果存在则会把对应的interface添加到proxyFactory中去
 		proxyFactory.addAdvisors(advisors);
 		proxyFactory.setTargetSource(targetSource);
 		customizeProxyFactory(proxyFactory);
@@ -547,6 +550,7 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 					" common interceptors and " + nrOfSpecificInterceptors + " specific interceptors");
 		}
 
+		// 适配统一得到Advisor
 		Advisor[] advisors = new Advisor[allInterceptors.size()];
 		for (int i = 0; i < allInterceptors.size(); i++) {
 			advisors[i] = this.advisorAdapterRegistry.wrap(allInterceptors.get(i));
