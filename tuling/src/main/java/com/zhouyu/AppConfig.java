@@ -1,6 +1,5 @@
 package com.zhouyu;
 
-
 import com.zhouyu.service.OrderService;
 import com.zhouyu.service.UserService;
 import org.aopalliance.aop.Advice;
@@ -10,10 +9,13 @@ import org.springframework.aop.MethodBeforeAdvice;
 import org.springframework.aop.Pointcut;
 import org.springframework.aop.PointcutAdvisor;
 import org.springframework.aop.TargetSource;
+import org.springframework.aop.aspectj.annotation.AnnotationAwareAspectJAutoProxyCreator;
 import org.springframework.aop.framework.ProxyFactoryBean;
 import org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.aop.framework.autoproxy.TargetSourceCreator;
+import org.springframework.aop.support.DefaultPointcutAdvisor;
+import org.springframework.aop.support.NameMatchMethodPointcut;
 import org.springframework.aop.support.StaticMethodMatcherPointcut;
 import org.springframework.aop.target.SingletonTargetSource;
 import org.springframework.context.annotation.*;
@@ -27,7 +29,32 @@ import javax.sql.DataSource;
 import java.lang.reflect.Method;
 
 @ComponentScan("com.zhouyu")
+//@Import(DefaultAdvisorAutoProxyCreator.class)
+//@EnableAspectJAutoProxy
 public class AppConfig {
+
+//	@Bean
+//	public DefaultPointcutAdvisor defaultPointcutAdvisor(){
+//		NameMatchMethodPointcut pointcut = new NameMatchMethodPointcut();
+//		pointcut.addMethodName("test");
+//
+//		DefaultPointcutAdvisor defaultPointcutAdvisor = new DefaultPointcutAdvisor();
+//		defaultPointcutAdvisor.setPointcut(pointcut);
+//		defaultPointcutAdvisor.setAdvice(new ZhouyuAfterReturningAdvice());
+//
+//		return defaultPointcutAdvisor;
+//	}
+
+//	@Bean
+//	public BeanNameAutoProxyCreator beanNameAutoProxyCreator() {
+//		BeanNameAutoProxyCreator beanNameAutoProxyCreator = new BeanNameAutoProxyCreator();
+//		beanNameAutoProxyCreator.setBeanNames("userSe*"); // ProxyFactory target
+//		beanNameAutoProxyCreator.setInterceptorNames("zhouyuAroundAdvice");
+//
+//		return beanNameAutoProxyCreator;
+//	}
+
+
 
 //	@Bean
 //	public JdbcTemplate jdbcTemplate() {

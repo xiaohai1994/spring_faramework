@@ -276,6 +276,7 @@ final class JdkDynamicAopProxy implements AopProxy, InvocationHandler, Serializa
 			otherProxy = (JdkDynamicAopProxy) other;
 		}
 		else if (Proxy.isProxyClass(other.getClass())) {
+			// other是一个jdk动态代理产生的代理对象
 			InvocationHandler ih = Proxy.getInvocationHandler(other);
 			if (!(ih instanceof JdkDynamicAopProxy)) {
 				return false;

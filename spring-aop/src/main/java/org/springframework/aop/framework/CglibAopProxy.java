@@ -318,8 +318,8 @@ class CglibAopProxy implements AopProxy, Serializable {
 				new StaticDispatcher(this.advised.getTargetSource().getTarget()) : new SerializableNoOp());
 
 		Callback[] mainCallbacks = new Callback[] {
-				aopInterceptor,  // for normal advice
-				targetInterceptor,  // invoke target without considering advice, if optimized
+				aopInterceptor,  // for normal advice，执行Interceptor链
+				targetInterceptor,  // invoke target without considering advice, if optimized 将代理对象设置到ThreadLocal中，AopContext.setCurrentProxy(proxy)
 				new SerializableNoOp(),  // no override for methods mapped to this
 				targetDispatcher, this.advisedDispatcher,
 				new EqualsInterceptor(this.advised),
@@ -584,14 +584,18 @@ class CglibAopProxy implements AopProxy, Serializable {
 		@Override
 		public Object intercept(Object proxy, Method method, Object[] args, MethodProxy methodProxy) {
 			Object other = args[0];
+			// 待比较对象等于代理对象
 			if (proxy == other) {
 				return true;
 			}
 			if (other instanceof Factory) {
+				// cglib产生的代理对象都实现了Factory接口
 				Callback callback = ((Factory) other).getCallback(INVOKE_EQUALS);
 				if (!(callback instanceof EqualsInterceptor)) {
 					return false;
 				}
+
+				// 如果是两个cglib代理对象在笔记，则比较它们所实现的接口，advisor，以及被代理对象
 				AdvisedSupport otherAdvised = ((EqualsInterceptor) callback).advised;
 				return AopProxyUtils.equalsInProxy(this.advised, otherAdvised);
 			}
