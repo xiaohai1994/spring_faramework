@@ -62,4 +62,5 @@ include 'tuling-web'
 include 'tuling-web'
 include 'tuling-boot'
 include 'tuling-vip-demo'
+include 'spring-tuling-webmvc'
 
