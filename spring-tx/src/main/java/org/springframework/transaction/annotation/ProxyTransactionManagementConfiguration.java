@@ -45,7 +45,6 @@ public class ProxyTransactionManagementConfiguration extends AbstractTransaction
 			TransactionAttributeSource transactionAttributeSource, TransactionInterceptor transactionInterceptor) {
 
 		BeanFactoryTransactionAttributeSourceAdvisor advisor = new BeanFactoryTransactionAttributeSourceAdvisor();
-		// BeanFactoryTransactionAttributeSourceAdvisor内部定义了一个Pointcut，Pointcut在匹配时会用到transactionAttributeSource来解析类或方法上是否存在@Transactional
 		advisor.setTransactionAttributeSource(transactionAttributeSource);
 		advisor.setAdvice(transactionInterceptor);
 		if (this.enableTx != null) {
@@ -57,7 +56,8 @@ public class ProxyTransactionManagementConfiguration extends AbstractTransaction
 	@Bean
 	@Role(BeanDefinition.ROLE_INFRASTRUCTURE)
 	public TransactionAttributeSource transactionAttributeSource() {
-		// AnnotationTransactionAttributeSource中构造了一个SpringTransactionAnnotationParser，用来解析类或方法上的@Transactional注解
+		// AnnotationTransactionAttributeSource中定义了一个Pointcut
+		// 并且AnnotationTransactionAttributeSource可以用来解析@Transactional注解，并得到一个RuleBasedTransactionAttribute对象
 		return new AnnotationTransactionAttributeSource();
 	}
 

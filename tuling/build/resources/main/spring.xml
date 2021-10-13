@@ -7,14 +7,5 @@
 	   https://www.springframework.org/schema/beans/spring-beans.xsd
 	   http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/aop https://www.springframework.org/schema/aop/spring-aop.xsd"
 	   >
-
-
-	<bean id="userService" class="com.zhouyu.service.UserService" autowire="byName"/>
-	<bean id="orderService" class="com.zhouyu.service.OrderService"/>
-
-
-
-
-
-
+	<bean id="appConfig1" class="com.zhouyu.AppConfig1"/>
 </beans>

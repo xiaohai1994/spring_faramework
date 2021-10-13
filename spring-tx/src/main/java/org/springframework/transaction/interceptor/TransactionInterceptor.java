@@ -121,7 +121,7 @@ public class TransactionInterceptor extends TransactionAspectSupport implements 
 			@Nullable
 			public Object proceedWithInvocation() throws Throwable {
 				// 执行后续的Interceptor，以及被代理的方法
-				return invocation.proceed();
+				return invocation.proceed(); // test() sql
 			}
 			@Override
 			public Object getTarget() {
