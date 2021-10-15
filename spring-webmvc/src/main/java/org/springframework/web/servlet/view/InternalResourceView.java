@@ -147,7 +147,8 @@ public class InternalResourceView extends AbstractUrlBasedView {
 		// Determine the path for the request dispatcher.  防止死循环请求
 		String dispatcherPath = prepareForRendering(request, response);
 
-		// Obtain a RequestDispatcher for the target resource (typically a JSP). 通过request拿到RequestDispatcher
+		// Obtain a RequestDispatcher for the target resource (typically a JSP).
+		// 通过request拿到RequestDispatcher request.getRequestDispacther("/test.jsp")
 		RequestDispatcher rd = getRequestDispatcher(request, dispatcherPath);
 		if (rd == null) {
 			throw new ServletException("Could not get RequestDispatcher for [" + getUrl() +

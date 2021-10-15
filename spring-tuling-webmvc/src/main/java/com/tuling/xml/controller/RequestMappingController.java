@@ -1,7 +1,9 @@
 package com.tuling.xml.controller;
 
+import com.tuling.javaconfig.initbinder.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
@@ -30,27 +32,34 @@ public class RequestMappingController {
     @RequestMapping(value="/mappin*")
     public String mapping08(){
         System.out.println("通配符——*");
-        return "/a.jsp";
+        return "a";
     }
     @RequestMapping(value="/mappin?")
     public String mapping07(){
         System.out.println("通配符——？");
-        return "/a.jsp";
+        return "a";
     }
     @RequestMapping(value="/{mapping}")
     public String mapping07(@PathVariable String mapping){
         System.out.println("PathVariable");
-        return "/a.jsp";
+        return "a";
     }
 
+    @RequestMapping("/updateUser")
+    @ResponseBody
+    public User updateUser(User user) {
+        //返回修改后的 那么可能会把数据库中的年龄更新为空
+        return user;
+    }
 
     @ResponseBody
     @RequestMapping("/updateUser2")
-    public List updateUser2(Integer id, String lastName) {
-        System.out.println(lastName);
+    public User updateUser2(Integer id, String lastName) {
+        User user=new User(id,lastName,null,null);
 
-        // 看看能不能转json
-        return Arrays.asList(id,lastName) ;
+        return user;
     }
+
+
 
 }

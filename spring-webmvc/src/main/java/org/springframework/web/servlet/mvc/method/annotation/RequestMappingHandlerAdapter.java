@@ -902,7 +902,7 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 			mavContainer.setIgnoreDefaultModelOnRedirect(this.ignoreDefaultModelOnRedirect);
 
 			// 获取当前的AsyncWebRequest，这里AsyncWebRequest的主要作用是用于判断目标
-			// handler的返回值是否为WebAsyncTask或DefferredResult，如果是这两种中的一种，
+			// handler的返回值是否为WebAsyncTask或DeferredResult，如果是这两种中的一种，
 			// 则说明当前请求的处理应该是异步的。所谓的异步，指的是当前请求会将Controller中
 			// 封装的业务逻辑放到一个线程池中进行调用，待该调用有返回结果之后再返回到response中。
 			// 这种处理的优点在于用于请求分发的线程能够解放出来，从而处理更多的请求,提高吞吐。

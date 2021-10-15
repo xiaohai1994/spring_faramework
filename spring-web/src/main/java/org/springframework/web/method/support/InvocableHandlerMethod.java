@@ -150,7 +150,7 @@ public class InvocableHandlerMethod extends HandlerMethod {
 	 */
 	protected Object[] getMethodArgumentValues(NativeWebRequest request, @Nullable ModelAndViewContainer mavContainer,
 			Object... providedArgs) throws Exception {
-		/*获取目标方法参数的描述数组对象，并不是通过反射实现的因为jdk1.8以下不支持*/
+		// 获取目标方法参数的描述数组对象
 		MethodParameter[] parameters = getMethodParameters();
 		if (ObjectUtils.isEmpty(parameters)) {
 			return EMPTY_ARGS;
@@ -167,7 +167,7 @@ public class InvocableHandlerMethod extends HandlerMethod {
 			if (args[i] != null) {
 				continue;
 			}
-			// 获取所有的参数解析器，然后筛选出合适的解析器
+			// * 获取所有的参数解析器，然后筛选出合适的解析器
 			if (!this.resolvers.supportsParameter(parameter)) {
 				throw new IllegalStateException(formatArgumentError(parameter, "No suitable resolver"));
 			}

@@ -20,8 +20,8 @@ import java.lang.reflect.Method;
  *
  * 自定义根据session映射的 映射器
  */
-@Component
-@Order(0)
+/*@Component
+@Order(0)*/
 public class SessionHandlerMapping  extends RequestMappingHandlerMapping {
 
 

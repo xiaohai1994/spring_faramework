@@ -222,10 +222,11 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 		// 获得所有候选beanName—— 当前容器所有的beanName
 		for (String beanName : getCandidateBeanNames()) {
 			if (!beanName.startsWith(SCOPED_TARGET_NAME_PREFIX)) {
+				// *处理候选bean——即解析@RequestMapping和映射路径
 				processCandidateBean(beanName);
 			}
 		}
-		// 解析完所有@RequestMapping调用，[可扩展]
+		// 解析完所有@RequestMapping的时候调用
 		handlerMethodsInitialized(getHandlerMethods());
 	}
 
@@ -265,6 +266,7 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 		}
 		// 这一步判断是关键  是否有Controller 或 RequestMapping注解
 		if (beanType != null && isHandler(beanType)) {
+			// 解析HandlerMethods
 			detectHandlerMethods(beanName);
 		}
 	}
@@ -280,6 +282,7 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 
 		if (handlerType != null) {
 			Class<?> userType = ClassUtils.getUserClass(handlerType);
+			// 循环所有方法
 			Map<Method, T> methods = MethodIntrospector.selectMethods(userType,
 					(MethodIntrospector.MetadataLookup<T>) method -> {
 						try {

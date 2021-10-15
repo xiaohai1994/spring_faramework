@@ -103,19 +103,22 @@ public class ServletRequestDataBinder extends WebDataBinder {
 	 * @see #bind(org.springframework.beans.PropertyValues)
 	 */
 	public void bind(ServletRequest request) {
+		// 通过request.getParameterNames(); 创建PropertyValues
 		MutablePropertyValues mpvs = new ServletRequestParameterPropertyValues(request);
+		// 如果是上传文件
 		MultipartRequest multipartRequest = WebUtils.getNativeRequest(request, MultipartRequest.class);
 		if (multipartRequest != null) {
 			bindMultipart(multipartRequest.getMultiFileMap(), mpvs);
 		}
+		//  multipart/form-data
 		else if (StringUtils.startsWithIgnoreCase(request.getContentType(), MediaType.MULTIPART_FORM_DATA_VALUE)) {
 			HttpServletRequest httpServletRequest = WebUtils.getNativeRequest(request, HttpServletRequest.class);
 			if (httpServletRequest != null && HttpMethod.POST.matches(httpServletRequest.getMethod())) {
 				StandardServletPartUtils.bindParts(httpServletRequest, mpvs, isBindEmptyMultipartFiles());
 			}
 		}
-		addBindValues(mpvs, request);
-		doBind(mpvs);
+		addBindValues(mpvs, request); //将 URI 参数合并到mpvs.PropertyValues
+		doBind(mpvs);  // 开始绑定
 	}
 
 	/**

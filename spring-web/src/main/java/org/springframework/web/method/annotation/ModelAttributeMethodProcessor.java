@@ -128,7 +128,7 @@ public class ModelAttributeMethodProcessor implements HandlerMethodArgumentResol
 
 		Assert.state(mavContainer != null, "ModelAttributeMethodProcessor requires ModelAndViewContainer");
 		Assert.state(binderFactory != null, "ModelAttributeMethodProcessor requires WebDataBinderFactory");
-
+		// javaBean参数就是获取它的类首字母小写作为名字
 		String name = ModelFactory.getNameForParameter(parameter);
 		ModelAttribute ann = parameter.getParameterAnnotation(ModelAttribute.class);
 		if (ann != null) {
@@ -164,10 +164,10 @@ public class ModelAttributeMethodProcessor implements HandlerMethodArgumentResol
 
 		if (bindingResult == null) {
 			// Bean property binding and validation;
-			// skipped in case of binding failure on construction.  为属性创建一个数据绑定器
+			// skipped in case of binding failure on construction.  将属性封装为数据绑定器
 			WebDataBinder binder = binderFactory.createBinder(webRequest, attribute, name);
 			if (binder.getTarget() != null) {
-				if (!mavContainer.isBindingDisabled(name)) {
+				if (!mavContainer.isBindingDisabled(name)) { // 通过reuqest
 					bindRequestParameters(binder, webRequest);
 				}
 				validateIfApplicable(binder, parameter);

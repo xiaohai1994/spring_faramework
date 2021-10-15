@@ -12,7 +12,7 @@ import java.util.List;
 public class ReflectTest {
 
     public static void main(String[] args) {
-        List<String> paramterNames = getParameterNameJava8(
+        List<Class> paramterNames = getParameterType(
                 TulingTestModelAttributeController.class, "updateUser2");
         paramterNames.forEach((x) -> System.out.println(x));
     }
@@ -26,6 +26,22 @@ public class ReflectTest {
                 Parameter[] params = method.getParameters();
                 for (Parameter parameter : params) {
                     paramterList.add(parameter.getName());
+                }
+            }
+        }
+        return paramterList;
+    }
+
+
+    public static List<Class> getParameterType(Class clazz, String methodName) {
+        List<Class> paramterList = new ArrayList<>();
+        Method[] methods = clazz.getDeclaredMethods();
+        for (Method method : methods) {
+            if (methodName.equals(method.getName())) {
+                //直接通过method就能拿到所有的参数
+                Parameter[] params = method.getParameters();
+                for (Parameter parameter : params) {
+                    paramterList.add(parameter.getType());
                 }
             }
         }
