@@ -138,7 +138,7 @@ public class InternalResourceView extends AbstractUrlBasedView {
 	protected void renderMergedOutputModel(
 			Map<String, Object> model, HttpServletRequest request, HttpServletResponse response) throws Exception {
 
-		// Expose the model object as request attributes. 将mode设置到request的attribute中.
+		// Expose the model object as request attributes. 将model设置到request的attribute中.
 		exposeModelAsRequestAttributes(model, request);
 
 		// Expose helpers as request attributes, if any.  设置国际化资源

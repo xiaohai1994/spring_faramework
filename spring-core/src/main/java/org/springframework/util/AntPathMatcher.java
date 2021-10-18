@@ -214,8 +214,8 @@ public class AntPathMatcher implements PathMatcher {
 		if (path == null || path.startsWith(this.pathSeparator) != pattern.startsWith(this.pathSeparator)) {
 			return false;
 		}
-
-		String[] pattDirs = tokenizePattern(pattern);
+		// / 分隔
+		String[] pattDirs = tokenizePattern(pattern); //是不是潜在匹配 ? * {
 		if (fullMatch && this.caseSensitive && !isPotentialMatch(path, pattDirs)) {
 			return false;
 		}

@@ -384,7 +384,7 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 		String lookupPath = initLookupPath(request);
 		this.mappingRegistry.acquireReadLock();
 		try {
-			// 通过lookupPath获取HandlerMethod对象
+			// 通过lookupPath解析最终的handler——HandlerMethod对象
 			HandlerMethod handlerMethod = lookupHandlerMethod(lookupPath, request);
 			return (handlerMethod != null ? handlerMethod.createWithResolvedBean() : null);
 		}
@@ -413,7 +413,7 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 			addMatchingMappings(directPathMatches, matches, request);
 		}
 		if (matches.isEmpty()) {
-			// 如果无path匹配，用所有的RequestMappingInfo进行匹配
+			// 如果无path匹配，用所有的RequestMappingInfo  通过AntPathMatcher匹配
 			addMatchingMappings(this.mappingRegistry.getRegistrations().keySet(), matches, request);
 		}
 		if (!matches.isEmpty()) {
@@ -429,9 +429,11 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 			if (matches.size() > 1) {
 				//创建MatchComparator的匹配器对象
 				Comparator<Match> comparator = new MatchComparator(getMappingComparator(request));
+
 				/** 根据精准度排序  大概是这样的： ? > * > {} >**   具体可以去看：
 				 * @see org.springframework.util.AntPathMatcher.AntPatternComparator#compare(java.lang.String, java.lang.String)*/
 				matches.sort(comparator);
+
 				// 排完序后拿到优先级最高的
 				bestMatch = matches.get(0);
 				if (logger.isTraceEnabled()) {

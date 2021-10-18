@@ -131,7 +131,7 @@ public class ModelAttributeMethodProcessor implements HandlerMethodArgumentResol
 		// javaBean参数就是获取它的类首字母小写作为名字
 		String name = ModelFactory.getNameForParameter(parameter);
 		ModelAttribute ann = parameter.getParameterAnnotation(ModelAttribute.class);
-		if (ann != null) {
+		if (ann != null) {//设置不允许绑定
 			mavContainer.setBinding(name, ann.binding());
 		}
 

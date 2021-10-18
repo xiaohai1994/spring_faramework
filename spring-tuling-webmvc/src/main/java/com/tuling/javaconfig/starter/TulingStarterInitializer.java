@@ -18,7 +18,7 @@ import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatche
  * Created by xsls on 2019/7/31.
  */
 
-public  class TulingStarterInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
+public class TulingStarterInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
 
 	/**
 	 * 方法实现说明:IOC 父容器的启动类

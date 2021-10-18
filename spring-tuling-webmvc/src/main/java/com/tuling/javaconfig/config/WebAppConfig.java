@@ -21,7 +21,7 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 @ComponentScan(basePackages = {"com.tuling"},includeFilters = {
 		@ComponentScan.Filter(type = FilterType.ANNOTATION,value = {RestController.class, Controller.class})
 },useDefaultFilters =false)
-@EnableWebMvc   // ≈<mvc:annotation-driven/>
+@EnableWebMvc   // = <mvc:annotation-driven/>
 public class WebAppConfig implements WebMvcConfigurer{
 
 	/**

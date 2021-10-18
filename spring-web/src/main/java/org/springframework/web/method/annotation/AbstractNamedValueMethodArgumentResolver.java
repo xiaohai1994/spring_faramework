@@ -151,7 +151,7 @@ public abstract class AbstractNamedValueMethodArgumentResolver implements Handle
 		NamedValueInfo namedValueInfo = this.namedValueInfoCache.get(parameter);
 		if (namedValueInfo == null) {
 			namedValueInfo = createNamedValueInfo(parameter);   // 创建一个@RequestParam对应的RequestParamNamedValueInfo
-			namedValueInfo = updateNamedValueInfo(parameter, namedValueInfo);  // 参数名称解析
+			namedValueInfo = updateNamedValueInfo(parameter, namedValueInfo);  // *参数名称解析
 			this.namedValueInfoCache.put(parameter, namedValueInfo);
 		}
 		return namedValueInfo;

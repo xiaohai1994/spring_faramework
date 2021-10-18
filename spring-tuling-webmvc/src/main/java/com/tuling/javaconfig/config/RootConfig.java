@@ -5,6 +5,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.ServletContextAware;
+
+import javax.servlet.ServletContext;
 
 import static org.springframework.context.annotation.FilterType.ASSIGNABLE_TYPE;
 
@@ -18,8 +21,9 @@ import static org.springframework.context.annotation.FilterType.ASSIGNABLE_TYPE;
 */
 @Configuration
 @ComponentScan(basePackages = "com.tuling",excludeFilters = {
-		@ComponentScan.Filter(type = FilterType.ANNOTATION,value={RestController.class,Controller.class}),
+		@ComponentScan.Filter(type = FilterType.ANNOTATION,value={Controller.class}),
 		@ComponentScan.Filter(type = ASSIGNABLE_TYPE,value =WebAppConfig.class ),
 })
 public class RootConfig {
+
 }

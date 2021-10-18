@@ -30,21 +30,20 @@ public class RequestMappingController {
     // localhost:8080/springmvc/mapping/ant1
 
     @RequestMapping(value="/mappin*")
-    public String mapping08(){
+    public String mapping02(){
         System.out.println("通配符——*");
         return "a";
     }
     @RequestMapping(value="/mappin?")
-    public String mapping07(){
+    public String mapping03(){
         System.out.println("通配符——？");
         return "a";
     }
-    @RequestMapping(value="/{mapping}")
-    public String mapping07(@PathVariable String mapping){
-        System.out.println("PathVariable");
+    @RequestMapping(value="/**")
+    public String mapping04(){
+        System.out.println("**");
         return "a";
     }
-
     @RequestMapping("/updateUser")
     @ResponseBody
     public User updateUser(User user) {

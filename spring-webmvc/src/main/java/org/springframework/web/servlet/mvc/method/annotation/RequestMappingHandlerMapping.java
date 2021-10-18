@@ -190,7 +190,7 @@ public class RequestMappingHandlerMapping extends RequestMappingInfoHandlerMappi
 	public void afterPropertiesSet() {
 
 		this.config = new RequestMappingInfo.BuilderConfiguration();
-		this.config.setTrailingSlashMatch(useTrailingSlashMatch());
+		this.config.setTrailingSlashMatch(useTrailingSlashMatch()); // 尾部斜杠
 		this.config.setContentNegotiationManager(getContentNegotiationManager());
 
 		if (getPatternParser() != null) {
