@@ -1,17 +1,24 @@
 package com.zhouyu.service;
 
-
+import org.springframework.aop.framework.AopContext;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
-/**
- * @author 周瑜
- */
+import javax.annotation.PostConstruct;
+
 @Component
-public class UserService {
+public class UserService implements InitializingBean{
 
-	public void test() {
+	@Autowired
+	private OrderService orderService;
 
-		System.out.println("test");
+	public void test(){
+		System.out.println(orderService);
 	}
 
 
