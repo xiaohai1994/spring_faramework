@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.PostConstruct;
 
 @Component
-public class UserService implements InitializingBean{
+public class UserService {
 
 	@Autowired
 	private OrderService orderService;
