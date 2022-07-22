@@ -73,8 +73,7 @@ public final class MethodIntrospector {
 			ReflectionUtils.doWithMethods(currentHandlerType, method -> {
 				//获取具体的方法对象
 				Method specificMethod = ClassUtils.getMostSpecificMethod(method, targetClass);
-				 /**回调 即解析@RequestMapping 返回RequestMappingInfo
-				  * @see org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping#getMappingForMethod(java.lang.reflect.Method, java.lang.Class)*/
+
 				T result = metadataLookup.inspect(specificMethod);
 				if (result != null) {
 					// 看看有没有桥接方法，泛型实现类jvm会自动生成桥接类，不知道有啥意义
