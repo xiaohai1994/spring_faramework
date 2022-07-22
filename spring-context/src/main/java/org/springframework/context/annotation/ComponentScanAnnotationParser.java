@@ -73,6 +73,11 @@ class ComponentScanAnnotationParser {
 	}
 
 
+	/**
+	 * @param componentScan 表示@ComponentScan注解的属性值
+	 * @param declaringClass 表示@ComponentScan注解所在的类
+	 * @return
+	 */
 	public Set<BeanDefinitionHolder> parse(AnnotationAttributes componentScan, final String declaringClass) {
 
 		ClassPathBeanDefinitionScanner scanner = new ClassPathBeanDefinitionScanner(this.registry,

@@ -17,7 +17,6 @@ public class ZhouyuSpringApplication {
 		applicationContext.register(config);
 		applicationContext.refresh();
 
-		// pom.xml  @Conditional
 		startTomcat(applicationContext);
 
 		return applicationContext;
@@ -50,8 +49,9 @@ public class ZhouyuSpringApplication {
 		service.setContainer(engine);
 		service.addConnector(connector);
 
-		DispatcherServlet dispatcherServlet = applicationContext.getBean(DispatcherServlet.class);
-		tomcat.addServlet(contextPath, "dispatcher", dispatcherServlet);
+		DispatcherServlet bean = applicationContext.getBean(DispatcherServlet.class);
+
+		tomcat.addServlet(contextPath, "dispatcher", bean);
 		context.addServletMappingDecoded("/*", "dispatcher");
 
 		try {
@@ -59,15 +59,6 @@ public class ZhouyuSpringApplication {
 		} catch (LifecycleException e) {
 			e.printStackTrace();
 		}
-
-//		Thread thread = new Thread(new Runnable() {
-//			@Override
-//			public void run() {
-//				tomcat.getServer().await();
-//			}
-//		});
-//		thread.setDaemon(false);
-//		thread.start();
 
 		return tomcat;
 	}

@@ -423,7 +423,9 @@ public class ClassPathScanningCandidateComponentProvider implements EnvironmentC
 			// 获取basePackage下所有的文件资源
 			String packageSearchPath = ResourcePatternResolver.CLASSPATH_ALL_URL_PREFIX +
 					resolveBasePackage(basePackage) + '/' + this.resourcePattern;
+
 			Resource[] resources = getResourcePatternResolver().getResources(packageSearchPath);
+
 			boolean traceEnabled = logger.isTraceEnabled();
 			boolean debugEnabled = logger.isDebugEnabled();
 			for (Resource resource : resources) {

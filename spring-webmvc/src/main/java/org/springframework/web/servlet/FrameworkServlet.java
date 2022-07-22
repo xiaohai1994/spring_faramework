@@ -528,7 +528,7 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 
 		try {
 			this.webApplicationContext = initWebApplicationContext();
-			// 无实现
+			// 空方法，无实现·
 			initFrameworkServlet();
 		}
 		catch (ServletException | RuntimeException ex) {

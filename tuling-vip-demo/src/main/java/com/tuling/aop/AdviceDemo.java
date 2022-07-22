@@ -14,10 +14,12 @@ public class AdviceDemo {
 	public static void main(String[] args) {
 		UserService userService = new UserService();
 
-		ProxyFactory proxyFactory = new ProxyFactory(userService);
+		ProxyFactory proxyFactory = new ProxyFactory();
+		proxyFactory.setTarget(userService);
+
 		proxyFactory.addAdvice(new ZhouyuAroundAdvice());
+
 		UserService proxy = (UserService) proxyFactory.getProxy();
 
-		System.out.println(proxy instanceof Factory);
 	}
 }

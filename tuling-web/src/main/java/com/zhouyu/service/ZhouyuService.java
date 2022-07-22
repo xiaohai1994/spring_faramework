@@ -10,7 +10,7 @@ import javax.servlet.ServletRequest;
 public class ZhouyuService {
 
 	public String test(){
-		return "123123";
+		return "zhouyu";
 	}
 
 

@@ -1043,6 +1043,7 @@ public abstract class AbstractPlatformTransactionManager implements PlatformTran
 		}
 		if (status.isNewTransaction()) {
 			// 这里会去关闭数据库连接
+//			System.out.println("关闭了数据库连接");
 			doCleanupAfterCompletion(status.getTransaction());
 		}
 

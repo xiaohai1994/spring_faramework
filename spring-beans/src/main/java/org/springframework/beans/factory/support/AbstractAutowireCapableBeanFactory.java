@@ -608,7 +608,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		Object exposedObject = bean;
 		try {
 			// 属性填充
-			populateBean(beanName, mbd, instanceWrapper);  //getBean()
+			populateBean(beanName, mbd, instanceWrapper);
 
 			// 初始化
 			exposedObject = initializeBean(beanName, exposedObject, mbd);
@@ -1852,7 +1852,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 					beanName, "Invocation of init method failed", ex);
 		}
 
-		// 初始化后
+		// 初始化后 AOP
 		if (mbd == null || !mbd.isSynthetic()) {
 			wrappedBean = applyBeanPostProcessorsAfterInitialization(wrappedBean, beanName);
 		}
