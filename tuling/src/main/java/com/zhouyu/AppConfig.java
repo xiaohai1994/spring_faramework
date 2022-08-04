@@ -21,13 +21,6 @@ import javax.sql.DataSource;
 public class AppConfig {
 
 //	@Bean
-//	public TaskScheduler taskScheduler(){
-//		ThreadPoolTaskScheduler threadPoolTaskScheduler = new ThreadPoolTaskScheduler();
-//		threadPoolTaskScheduler.setPoolSize(2);
-//		return threadPoolTaskScheduler;
-//	}
-
-//	@Bean
 //	public JdbcTemplate jdbcTemplate() {
 //		return new JdbcTemplate(dataSource());
 //	}

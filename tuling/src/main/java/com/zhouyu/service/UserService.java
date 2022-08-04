@@ -26,21 +26,6 @@ public class UserService {
 		System.out.println(orderService);
 	}
 
-	@Scheduled(fixedDelayString = "${fixedDelayString}")
-	public void scheduleMethod(){
-		try {
-			Thread.sleep(5000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		System.out.println("任务1"+ Thread.currentThread().getName());
-	}
-
-	@Scheduled(fixedDelayString = "${fixedDelayString}")
-	public void scheduleMethod2(){
-		System.out.println("任务2"+ Thread.currentThread().getName());
-	}
-
 
 
 

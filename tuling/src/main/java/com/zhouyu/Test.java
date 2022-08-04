@@ -31,21 +31,10 @@ public class Test {
 	public static void main(String[] args) {
 
 		// 创建一个Spring容器
-//		AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext(AppConfig.class);
-//
-//		UserService userService = (UserService) applicationContext.getBean("userService");
-//		userService.test();
+		AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext(AppConfig.class);
 
-		ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(2);
-		executor.scheduleWithFixedDelay(() -> {
-			try {
-				Thread.sleep(5000);
-				System.out.println("任务1"+Thread.currentThread().getName());
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}, 0, 1, TimeUnit.SECONDS);
-
+		UserService userService = (UserService) applicationContext.getBean("userService");
+		userService.test();
 
 
 //		UserService userService1 = new UserService();
