@@ -397,7 +397,7 @@ public abstract class TransactionAspectSupport implements BeanFactoryAware, Init
 				// This is an around advice: Invoke the next interceptor in the chain.
 				// This will normally result in a target object being invoked.
 				// 执行下一个Interceptor或被代理对象中的方法
-				retVal = invocation.proceedWithInvocation(); //test
+				retVal = invocation.proceedWithInvocation(); // test() sql
 			}
 			catch (Throwable ex) {
 				// target invocation exception

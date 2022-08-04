@@ -203,6 +203,7 @@ public class InitDestroyAnnotationBeanPostProcessor
 			// Happens after deserialization, during destruction...
 			return buildLifecycleMetadata(clazz);
 		}
+
 		// Quick check on the concurrent map first, with minimal locking.
 		LifecycleMetadata metadata = this.lifecycleMetadataCache.get(clazz);
 		if (metadata == null) {

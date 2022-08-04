@@ -49,9 +49,7 @@ public class ZhouyuSpringApplication {
 		service.setContainer(engine);
 		service.addConnector(connector);
 
-		DispatcherServlet bean = applicationContext.getBean(DispatcherServlet.class);
-
-		tomcat.addServlet(contextPath, "dispatcher", bean);
+		tomcat.addServlet(contextPath, "dispatcher", new DispatcherServlet(applicationContext));
 		context.addServletMappingDecoded("/*", "dispatcher");
 
 		try {

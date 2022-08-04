@@ -14,7 +14,6 @@ public class ZhouyuController {
 
 	@GetMapping("/test")
 	public String test() {
-		System.out.println("v1");
 		return zhouyuService.test();
 	}
 
