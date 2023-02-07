@@ -264,7 +264,7 @@ class ConstructorResolver {
 				}
 				else {
 					// Explicit arguments given -> arguments length must match exactly.
-					// 没有通过BeanDefinition指定构造方法参数值，但是在调getBean方法是传入了参数值，那就表示只能用对应参数个数的构造方法
+					// 在调getBean方法时传入了参数值，那就表示只能用对应参数个数的构造方法
 					if (parameterCount != explicitArgs.length) {
 						continue;
 					}
